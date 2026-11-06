@@ -7,10 +7,12 @@ import {
   Heart,
   Mail,
   Sparkles,
+  Radio,
 } from 'lucide-react';
 import SpookyIntro from './components/SpookyIntro/SpookyIntro';
 import StarrySkyCanvas from './components/StarrySkyCanvas/StarrySkyCanvas';
 import HeroBirthday from './components/HeroBirthday/HeroBirthday';
+import CassetteVoicePlayer from './components/ReactBits/CassetteVoicePlayer';
 import AchievementsBento from './components/AchievementsBento/AchievementsBento';
 import LoveJourney from './components/LoveJourney/LoveJourney';
 import LoveLetterAndCard from './components/LoveLetterAndCard/LoveLetterAndCard';
@@ -44,7 +46,13 @@ export default function App() {
 
   useEffect(() => {
     if (!introCompleted) return;
-    const sectionIds = ['hero', 'achievements', 'love-journey', 'letter'];
+    const sectionIds = [
+      'hero',
+      'cassette',
+      'achievements',
+      'love-journey',
+      'letter',
+    ];
     const handleScroll = () => {
       const scrollY = window.scrollY + 260;
       for (let i = sectionIds.length - 1; i >= 0; i--) {
@@ -134,6 +142,17 @@ export default function App() {
                 <span className="hidden sm:inline">Sinh Nhật 3D</span>
               </a>
               <a
+                href="#cassette"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all ${
+                  activeSection === 'cassette'
+                    ? 'bg-gold/20 text-gold border border-gold/45'
+                    : 'text-cream hover:text-plum-deep hover:bg-gold'
+                }`}
+              >
+                <Radio className="w-3.5 h-3.5 text-rose" />
+                <span className="hidden sm:inline">Băng Cassette</span>
+              </a>
+              <a
                 href="#achievements"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all ${
                   activeSection === 'achievements'
@@ -197,6 +216,10 @@ export default function App() {
           {/* Main Celebration Sections */}
           <main className="relative z-10 pb-16">
             <HeroBirthday onOpenLightbox={setLightboxImage} />
+            <CassetteVoicePlayer
+              onDuckCelebrationMusic={handleDuckCelebrationMusic}
+              onEnsureBgmPlaying={startCelebrationMusic}
+            />
             <AchievementsBento onOpenLightbox={setLightboxImage} />
             <LoveJourney onOpenLightbox={setLightboxImage} />
             <BirthdayVoucherBook />

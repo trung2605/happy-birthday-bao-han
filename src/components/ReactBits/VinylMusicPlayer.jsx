@@ -20,6 +20,7 @@ import {
  */
 const DOCK_ITEMS = [
   { id: 'hero', label: 'Sân Khấu 19', icon: Cake },
+  { id: 'cassette', label: 'Băng Cassette', icon: Disc3 },
   { id: 'achievements', label: 'Dấu Ấn 18', icon: Award },
   { id: 'love-journey', label: 'Kỷ Niệm Yêu', icon: Heart },
   { id: 'vouchers', label: '5 Vé Đặc Quyền', icon: Ticket },

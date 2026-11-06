@@ -603,9 +603,9 @@ export default function SpookyIntro({
     }
 
     if (lineFinished) {
-      // Play the action prompt voiceover for the current room
+      // Play the action prompt voiceover for the current room (Anh Trung's recorded voice)
       if (currentStep?.id) {
-        playVoiceClip(`/audio/tts/${currentStep.id}-action.mp3`);
+        playVoiceClip(`/audio/voice/${currentStep.id}-action.m4a`);
       }
       return;
     }
@@ -618,12 +618,12 @@ export default function SpookyIntro({
         } else {
           setLineFinished(true);
         }
-      }, 1100);
+      }, 850);
     };
 
     if (currentStep?.id) {
       playVoiceClip(
-        `/audio/tts/${currentStep.id}-${lineIndex}.mp3`,
+        `/audio/voice/${currentStep.id}-${lineIndex}.m4a`,
         advanceToNext
       );
     }
@@ -637,7 +637,7 @@ export default function SpookyIntro({
           setLineFinished(true);
         }
       }
-    }, 6800);
+    }, 11000);
 
     return () => {
       clearTimeout(fallbackTimer);
@@ -822,12 +822,12 @@ export default function SpookyIntro({
             {audioMuted ? (
               <>
                 <VolumeX className="w-4 h-4 text-rose" />
-                <span>Âm Thanh & Giọng AI: Tắt</span>
+                <span>Âm Thanh & Giọng Anh Trung: Tắt</span>
               </>
             ) : (
               <>
                 <Volume2 className="w-4 h-4 text-gold animate-pulse" />
-                <span>Âm Thanh & Giọng AI Nam Ấm: Bật</span>
+                <span>Âm Thanh & Giọng Anh Trung: Bật</span>
               </>
             )}
           </button>
@@ -839,19 +839,19 @@ export default function SpookyIntro({
                 if (showCakeStage) {
                   playVoiceClip('/audio/tts/cake-intro.mp3');
                 } else if (lineFinished && currentStep?.id) {
-                  playVoiceClip(`/audio/tts/${currentStep.id}-action.mp3`);
+                  playVoiceClip(`/audio/voice/${currentStep.id}-action.m4a`);
                 } else if (currentStep?.id) {
                   playVoiceClip(
-                    `/audio/tts/${currentStep.id}-${lineIndex}.mp3`
+                    `/audio/voice/${currentStep.id}-${lineIndex}.m4a`
                   );
                 }
               }}
               className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-display font-bold uppercase tracking-wider backdrop-blur-md hover:bg-gold hover:text-plum-deep transition-colors cursor-pointer"
-              title="Nghe lại câu thoại hiện tại bằng giọng AI nam ấm"
+              title="Nghe lại câu thoại hiện tại bằng giọng thu âm của Anh Trung"
             >
               <Mic className="w-3.5 h-3.5" />
               <span>
-                {isVoiceSpeaking ? 'Giọng Nam Ấm Đang Đọc...' : 'Nghe Lại Câu Này'}
+                {isVoiceSpeaking ? 'Giọng Anh Trung Đang Kể...' : 'Nghe Lại Câu Này'}
               </span>
             </button>
           )}
@@ -909,8 +909,8 @@ export default function SpookyIntro({
                     <Volume2 className="w-3.5 h-3.5 animate-pulse" />
                     <span>
                       {isVoiceSpeaking
-                        ? 'Giọng Anh Trung (AI Nam Ấm) Đang Nói...'
-                        : 'Lời Dẫn Chuyện • Chạm Để Tiếp Tục'}
+                        ? 'Giọng Anh Trung Đang Kể Chuyện...'
+                        : 'Lời Dẫn Chuyện Của Anh Trung • Chạm Để Tiếp Tục'}
                     </span>
                   </div>
 
