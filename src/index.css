@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --plum: #140b29;
+  --plum-deep: #0b0719;
+  --gold: #fcbc5b;
+  --gold-ink: #8a5a12;
+  --cream: #ffeedf;
+  --cream-soft: #d8c8dc;
+  --rose: #ff7eb6;
+  --line: rgba(255, 238, 223, 0.22);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  background-color: var(--plum-deep);
+  color: var(--cream);
+  overflow-x: clip;
+}
+
+/* Browser Surface Theming (Impeccable Craft Floor) */
+::selection {
+  background: var(--gold);
+  color: var(--plum-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0719;
+}
+::-webkit-scrollbar-thumb {
+  background: #3b235a;
+  border-radius: 999px;
+  border: 2px solid #0b0719;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fcbc5b;
+}
+
+.num-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Unstructured Masks & Architectural Cutouts inspired by giaimamanhai.vercel.app */
+.mask-four-star {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 A50 50 0 0 0 100 50 A50 50 0 0 0 50 100 A50 50 0 0 0 0 50 A50 50 0 0 0 50 0 Z'/%3E%3C/svg%3E")
+    50% / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 0 A50 50 0 0 0 100 50 A50 50 0 0 0 50 100 A50 50 0 0 0 0 50 A50 50 0 0 0 50 0 Z'/%3E%3C/svg%3E")
+    50% / contain no-repeat;
+}
+
+.arch-frame {
+  border-radius: 999px 999px 0 0;
+}
+
+.pill-arch-frame {
+  border-radius: 999px 999px 28px 28px;
+}
+
+.pill-right-frame {
+  border-radius: 28px 999px 999px 28px;
+}
+
+.pill-left-frame {
+  border-radius: 999px 28px 28px 999px;
+}
+
+@keyframes driftCloud {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marqueeScroll 32s linear infinite;
+}
+
+/* Hiệu ứng lắt lư (Pendulum Sway) cho các tấm ảnh Polaroid & Gallery */
+@keyframes polaroidSwayA {
+  0%,
+  100% {
+    transform: rotate(-3.4deg) translateY(0px);
+  }
+  50% {
+    transform: rotate(3.4deg) translateY(-5px);
+  }
+}
+
+@keyframes polaroidSwayB {
+  0%,
+  100% {
+    transform: rotate(3.2deg) translateY(-4px);
+  }
+  50% {
+    transform: rotate(-3.2deg) translateY(2px);
+  }
+}
+
+@keyframes photoSwaySoft {
+  0%,
+  100% {
+    transform: rotate(-1.4deg) translateY(0px);
+  }
+  50% {
+    transform: rotate(1.4deg) translateY(-4px);
+  }
+}
+
+.polaroid-sway-a {
+  transform-origin: 50% 10px;
+  animation: polaroidSwayA var(--sway-dur, 4.2s) ease-in-out infinite;
+  animation-delay: var(--sway-delay, 0s);
+  will-change: transform;
+}
+
+.polaroid-sway-b {
+  transform-origin: 50% 10px;
+  animation: polaroidSwayB var(--sway-dur, 4.6s) ease-in-out infinite;
+  animation-delay: var(--sway-delay, 0s);
+  will-change: transform;
+}
+
+.photo-sway-soft {
+  transform-origin: 50% 15%;
+  animation: photoSwaySoft var(--sway-dur, 4.8s) ease-in-out infinite;
+  animation-delay: var(--sway-delay, 0s);
+  will-change: transform;
+}
+
+.polaroid-sway-a:hover,
+.polaroid-sway-b:hover,
+.photo-sway-soft:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

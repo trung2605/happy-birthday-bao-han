@@ -1,0 +1,11 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+# Exclude raw heavy unoptimized photo dumps from git/vercel upload so deployment stays fast and clean
+image/
+Anh Trung vào Sgon/
+Anh Trung vào Sgon-20261105T150249Z-1-002/
+*.zip
