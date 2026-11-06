@@ -15,7 +15,6 @@ import AchievementsBento from './components/AchievementsBento/AchievementsBento'
 import LoveJourney from './components/LoveJourney/LoveJourney';
 import LoveLetterAndCard from './components/LoveLetterAndCard/LoveLetterAndCard';
 import ClickSpark from './components/ReactBits/ClickSpark';
-import LiveLoveCounter from './components/ReactBits/LiveLoveCounter';
 import BirthdayVoucherBook from './components/ReactBits/TearTicket';
 import {
   FloatingDock,
@@ -199,7 +198,6 @@ export default function App() {
           <main className="relative z-10 pb-16">
             <HeroBirthday onOpenLightbox={setLightboxImage} />
             <AchievementsBento onOpenLightbox={setLightboxImage} />
-            <LiveLoveCounter />
             <LoveJourney onOpenLightbox={setLightboxImage} />
             <BirthdayVoucherBook />
             <LoveLetterAndCard

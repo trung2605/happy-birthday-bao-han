@@ -21,7 +21,6 @@ import {
 const DOCK_ITEMS = [
   { id: 'hero', label: 'Sân Khấu 19', icon: Cake },
   { id: 'achievements', label: 'Dấu Ấn 18', icon: Award },
-  { id: 'live-counter', label: 'Đếm Ngày Yêu', icon: Clock },
   { id: 'love-journey', label: 'Kỷ Niệm Yêu', icon: Heart },
   { id: 'vouchers', label: '5 Vé Đặc Quyền', icon: Ticket },
   { id: 'letter', label: 'Thư & Thiệp 3D', icon: Mail },
