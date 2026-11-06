@@ -24,8 +24,8 @@ const VOUCHERS = [
     number: '01',
     category: 'ĐẶC QUYỀN ẨM THỰC & TRÀ SỮA',
     title: 'Trà Sữa & Đồ Ngọt Không Giới Hạn',
-    desc: '100% Free फुल Topping mọi lúc cô Thỏ nhỏ thèm đồ ngọt, đi học ở WSU về mệt hoặc thức khuya hậu kỳ ảnh cho khách.',
-    route: 'ĐÀ NẴNG ⇄ SÀI GÒN',
+    desc: '100% Free Full Topping mọi lúc cô Thỏ nhỏ thèm đồ ngọt, đi học ở WSU về mệt hoặc thức khuya hậu kỳ ảnh cho khách.',
+    route: 'ĐÀ NẴNG — SÀI GÒN',
     validity: 'HIỆU LỰC VĨNH VIỄN • TUỔI 19',
     icon: Coffee,
     accent: 'from-amber-400/20 via-gold/10 to-plum',
@@ -46,10 +46,10 @@ const VOUCHERS = [
     id: 'voucher-03',
     code: 'BUN-19-FLIGHT-HUG',
     number: '03',
-    category: 'VÉ MÁY BAY ĐẶC BIỆT DAD ✈ SGN',
+    category: 'VÉ MÁY BAY ĐẶC BIỆT ĐÀ NẴNG — SÀI GÒN',
     title: 'Chuyến Bay Vào Sài Gòn Ôm Bún Thật Chặt',
     desc: 'Quy đổi ngay những cái ôm ấm áp, nắm tay đi tàu Metro Bến Thành – Suối Tiên và dạo phố bù đắp mọi ngày yêu xa.',
-    route: 'DAD ✈ SGN • GATE 19',
+    route: 'DAD — SGN • GATE 19',
     validity: 'KHÔNG GIỚI HẠN SỐ LẦN',
     icon: Plane,
     accent: 'from-sky-400/20 via-indigo-500/10 to-plum',
@@ -226,7 +226,7 @@ function TearTicketCard({ voucher, isTorn, onTear, onRestore }) {
 }
 
 export default function BirthdayVoucherBook() {
-  const [tornIds, setTornIds] = useState(['voucher-01']);
+  const [tornIds, setTornIds] = useState([]);
 
   const handleTear = (id) => {
     if (!tornIds.includes(id)) {

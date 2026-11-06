@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Briefcase,
@@ -32,8 +32,24 @@ export function AccordionMilestoneGallery({
   onSelect,
   onOpenLightbox,
 }) {
+  const hoverTimerRef = useRef(null);
+
+  const handleHoverEnter = (id) => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => {
+      onSelect(id);
+    }, 90);
+  };
+
+  const handleHoverLeave = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row gap-3.5 w-full min-h-[460px] mb-14">
+    <div
+      onMouseLeave={handleHoverLeave}
+      className="flex flex-col lg:flex-row gap-3.5 w-full lg:h-[430px] mb-14"
+    >
       {items.map((item, idx) => {
         const IconComp = ICON_MAP[item.icon] || Sparkles;
         const isExpanded = item.id === activeId;
@@ -45,9 +61,9 @@ export function AccordionMilestoneGallery({
             key={item.id}
             layout
             onClick={() => onSelect(item.id)}
-            onMouseEnter={() => onSelect(item.id)}
-            transition={{ type: 'spring', stiffness: 240, damping: 26 }}
-            className={`relative rounded-[26px] overflow-hidden border-2 cursor-pointer transition-colors flex flex-col ${
+            onMouseEnter={() => handleHoverEnter(item.id)}
+            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+            className={`relative rounded-[26px] overflow-hidden border-2 cursor-pointer transition-colors flex flex-col h-full ${
               isExpanded
                 ? 'lg:flex-[3.6] bg-cream text-plum-deep border-gold shadow-[0_24px_70px_rgba(252,188,91,0.28)]'
                 : 'lg:flex-[0.85] bg-plum/85 text-cream border-cream/15 hover:border-gold/55'
@@ -177,17 +193,18 @@ export function DepthCarouselWithViewfinder({ artworks, onOpenLightbox }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showGrid, setShowGrid] = useState(true);
   const [shutterFlash, setShutterFlash] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const total = artworks.length;
   const currentArt = artworks[activeIndex] || artworks[0];
 
   useEffect(() => {
-    if (total <= 1) return;
+    if (total <= 1 || isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % total);
     }, 2200);
     return () => clearInterval(timer);
-  }, [total]);
+  }, [total, isPaused]);
 
   const step = (dir) => {
     setActiveIndex((prev) => (prev + dir + total) % total);
@@ -210,7 +227,11 @@ export function DepthCarouselWithViewfinder({ artworks, onOpenLightbox }) {
   const exif = EXIF_PRESETS[activeIndex % EXIF_PRESETS.length];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+    >
       <div className="relative rounded-[30px] bg-plum-deep/95 border-2 border-gold/45 p-4 sm:p-7 shadow-[0_28px_80px_rgba(0,0,0,0.75)] overflow-hidden">
         {/* Camera Shutter Flash Effect */}
         <AnimatePresence>

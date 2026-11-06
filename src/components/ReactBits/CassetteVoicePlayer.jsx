@@ -58,19 +58,19 @@ function formatTime(sec) {
 
 function CassetteSpool({ isPlaying, tapeRadius = 38 }) {
   return (
-    <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+    <div className="relative w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center shrink-0">
       {/* Dynamic magnetic tape reel diameter */}
       <div
         style={{
           width: `${tapeRadius * 2}px`,
           height: `${tapeRadius * 2}px`,
         }}
-        className="absolute rounded-full bg-gradient-to-br from-[#2a1810] via-[#1a0f0a] to-[#0d0705] border border-amber-700/40 shadow-inner transition-all duration-300"
+        className="absolute rounded-full bg-gradient-to-br from-[#2a1810] via-[#1a0f0a] to-[#0d0705] border border-amber-700/40 shadow-inner transition-all duration-300 max-w-full max-h-full"
       />
 
       {/* Rotating toothed hub */}
       <div
-        className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#fff5e4] via-[#fcbc5b] to-[#b87b1e] border-2 border-plum-deep shadow-[0_0_20px_rgba(252,188,91,0.45)] flex items-center justify-center ${
+        className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#fff5e4] via-[#fcbc5b] to-[#b87b1e] border-2 border-plum-deep shadow-[0_0_20px_rgba(252,188,91,0.45)] flex items-center justify-center ${
           isPlaying ? 'animate-spin' : ''
         }`}
         style={{ animationDuration: '2.8s' }}
@@ -327,8 +327,13 @@ export default function CassetteVoicePlayer({
                           C-90 HI-FI STEREO • 08.11.2026
                         </span>
                       </div>
-                      <span className="text-[10px] font-display font-bold uppercase tracking-widest text-rose bg-plum-deep px-2.5 py-0.5 rounded-full">
-                        {isPlaying ? '● REC / PLAYING' : 'READY TO PLAY'}
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-display font-bold uppercase tracking-widest text-rose bg-plum-deep px-2.5 py-0.5 rounded-full">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full bg-rose ${
+                            isPlaying ? 'animate-ping' : ''
+                          }`}
+                        />
+                        <span>{isPlaying ? 'REC / PLAYING' : 'READY TO PLAY'}</span>
                       </span>
                     </div>
 
@@ -424,7 +429,7 @@ export default function CassetteVoicePlayer({
                 <div className="space-y-2">
                   <span className="text-xs font-display font-bold uppercase tracking-[0.2em] text-gold flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-rose" />
-                    <span>VỪA NGHE LỜI CHÚC VỪA Dạo XEM WEB</span>
+                    <span>VỪA NGHE LỜI CHÚC VỪA DẠO XEM WEB</span>
                   </span>
                   <h3 className="font-display font-black uppercase text-xl sm:text-2xl text-cream leading-snug">
                     {currentTrack.title}

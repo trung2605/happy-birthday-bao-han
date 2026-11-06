@@ -8,6 +8,7 @@ import {
   Mail,
   Sparkles,
   Radio,
+  Ticket,
 } from 'lucide-react';
 import SpookyIntro from './components/SpookyIntro/SpookyIntro';
 import StarrySkyCanvas from './components/StarrySkyCanvas/StarrySkyCanvas';
@@ -18,10 +19,7 @@ import LoveJourney from './components/LoveJourney/LoveJourney';
 import LoveLetterAndCard from './components/LoveLetterAndCard/LoveLetterAndCard';
 import ClickSpark from './components/ReactBits/ClickSpark';
 import BirthdayVoucherBook from './components/ReactBits/TearTicket';
-import {
-  FloatingDock,
-  VinylMusicPlayer,
-} from './components/ReactBits/VinylMusicPlayer';
+import { VinylMusicPlayer } from './components/ReactBits/VinylMusicPlayer';
 import CustomCursor from './components/ui/CustomCursor';
 import { Dialog, DialogContent, DialogTitle } from './components/ui/dialog';
 
@@ -51,6 +49,7 @@ export default function App() {
       'cassette',
       'achievements',
       'love-journey',
+      'vouchers',
       'letter',
     ];
     const handleScroll = () => {
@@ -172,7 +171,18 @@ export default function App() {
                 }`}
               >
                 <Heart className="w-3.5 h-3.5 text-rose" />
-                <span className="hidden sm:inline">1 Năm Yêu Nhau</span>
+                <span className="hidden md:inline">1 Năm Yêu Nhau</span>
+              </a>
+              <a
+                href="#vouchers"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all ${
+                  activeSection === 'vouchers'
+                    ? 'bg-gold/20 text-gold border border-gold/45'
+                    : 'text-cream hover:text-plum-deep hover:bg-gold'
+                }`}
+              >
+                <Ticket className="w-3.5 h-3.5 text-gold" />
+                <span className="hidden lg:inline">5 Vé Đặc Quyền</span>
               </a>
               <a
                 href="#letter"
@@ -183,7 +193,7 @@ export default function App() {
                 }`}
               >
                 <Mail className="w-3.5 h-3.5 text-gold" />
-                <span className="hidden sm:inline">Thư Tay AI</span>
+                <span className="hidden md:inline">Thư Tay</span>
               </a>
 
               <div className="h-4 w-px bg-cream/15 mx-1" />
@@ -229,15 +239,14 @@ export default function App() {
             />
           </main>
 
-          {/* React Bits Floating Magnification Dock & Spinning Vinyl Record Player */}
-          <FloatingDock />
+          {/* Spinning Vinyl Record Background Music Controller */}
           <VinylMusicPlayer
             musicMuted={!musicPlaying}
             onToggleMute={toggleMusic}
           />
 
           {/* Footer */}
-          <footer className="relative z-10 py-12 px-4 border-t border-gold/20 text-center bg-plum-deep/90 backdrop-blur-md">
+          <footer className="relative z-10 pt-12 pb-24 px-4 border-t border-gold/20 text-center bg-plum-deep/90 backdrop-blur-md">
             <div className="max-w-4xl mx-auto flex flex-col items-center gap-3">
               <div className="inline-flex items-center gap-2 text-gold font-script text-3xl">
                 <Sparkles className="w-4 h-4" />
@@ -263,8 +272,8 @@ export default function App() {
                 Xem ảnh kỷ niệm Lưu Nguyễn Bảo Hân
               </DialogTitle>
               {lightboxImage && (
-                <div className="flex flex-col items-center gap-2.5">
-                  <div className="flex items-center justify-between gap-4 px-4 py-1.5 rounded-full bg-plum-deep/90 border border-gold/40 text-[11px] font-display font-bold uppercase tracking-[0.18em] text-gold">
+                <div className="flex flex-col items-center gap-3 pt-2">
+                  <div className="flex items-center justify-between gap-4 px-4 py-1.5 mr-10 rounded-full bg-plum-deep/90 border border-gold/40 text-[11px] font-display font-bold uppercase tracking-[0.18em] text-gold">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       AF-C • EYE DETECT [BẢO HÂN]
@@ -276,7 +285,7 @@ export default function App() {
                   <img
                     src={lightboxImage}
                     alt="Kỷ niệm Bảo Hân"
-                    className="max-w-full max-h-[82vh] rounded-2xl object-contain border-2 border-gold/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
+                    className="max-w-full max-h-[80vh] rounded-2xl object-contain border-2 border-gold/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
                   />
                 </div>
               )}

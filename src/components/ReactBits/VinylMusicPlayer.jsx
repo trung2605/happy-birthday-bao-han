@@ -68,45 +68,17 @@ export function FloatingDock({ onPlayCustomTrack }) {
 
 export function VinylMusicPlayer({ musicMuted, onToggleMute }) {
   const [expanded, setExpanded] = useState(false);
-  const [playingVoiceTrack, setPlayingVoiceTrack] = useState(null);
-  const voiceAudioRef = useRef(null);
 
-  const VOICE_TRACKS = [
-    {
-      id: 'cake-intro',
-      title: 'Lời Chúc Thổi Bánh Kem 3D',
-      src: '/audio/tts/cake-intro.mp3',
-    },
-    {
-      id: 'love-letter',
-      title: 'Lá Thư Tay Anh Trung Gửi Hân',
-      src: '/audio/tts/love-letter.mp3',
-    },
-    {
-      id: 'flip-card',
-      title: 'Lời Chúc Thiệp 3D Tuổi 19',
-      src: '/audio/tts/flip-card.mp3',
-    },
-  ];
-
-  const handlePlayVoice = (track) => {
-    if (voiceAudioRef.current) {
-      voiceAudioRef.current.pause();
+  const jumpToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
-    if (playingVoiceTrack === track.id) {
-      setPlayingVoiceTrack(null);
-      return;
-    }
-    const audio = new Audio(track.src);
-    audio.volume = 1.0;
-    voiceAudioRef.current = audio;
-    setPlayingVoiceTrack(track.id);
-    audio.onended = () => setPlayingVoiceTrack(null);
-    audio.play().catch(() => setPlayingVoiceTrack(null));
+    setExpanded(false);
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 flex flex-col items-start">
+    <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start">
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -118,7 +90,7 @@ export function VinylMusicPlayer({ musicMuted, onToggleMute }) {
             <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-cream/10">
               <span className="text-[11px] font-display font-bold uppercase tracking-[0.18em] text-gold flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-rose" />
-                <span>HỘP NHẠC ĐĨA THAN TUỔI 19</span>
+                <span>ĐĨA THAN NHẠC NỀN TUỔI 19</span>
               </span>
               <button
                 type="button"
@@ -131,28 +103,28 @@ export function VinylMusicPlayer({ musicMuted, onToggleMute }) {
 
             <div className="space-y-1.5">
               <p className="text-[10px] font-display font-bold uppercase tracking-wider text-cream/60">
-                Chọn Nghe Nhanh Giọng Đọc Kỷ Niệm:
+                Đi Nhanh Tới Góc Âm Thanh:
               </p>
-              {VOICE_TRACKS.map((t) => {
-                const isPlaying = playingVoiceTrack === t.id;
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => handlePlayVoice(t)}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${
-                      isPlaying
-                        ? 'bg-gold text-plum-deep font-bold'
-                        : 'bg-white/5 hover:bg-white/15 text-cream/85'
-                    }`}
-                  >
-                    <span className="truncate">{t.title}</span>
-                    <span className="text-[10px] font-display uppercase tracking-wider shrink-0 ml-2">
-                      {isPlaying ? 'Đang phát' : 'Phát'}
-                    </span>
-                  </button>
-                );
-              })}
+              <button
+                type="button"
+                onClick={() => jumpToSection('cassette')}
+                className="w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between bg-gold text-plum-deep font-bold transition-colors cursor-pointer"
+              >
+                <span className="truncate">Cuốn Băng Cassette Của Anh Trung</span>
+                <span className="text-[10px] font-display uppercase tracking-wider shrink-0 ml-2">
+                  Mở ngay
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => jumpToSection('letter')}
+                className="w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between bg-white/5 hover:bg-white/15 text-cream/85 transition-colors cursor-pointer"
+              >
+                <span className="truncate">Lá Thư Tay & Thiệp 3D Cuối Trang</span>
+                <span className="text-[10px] font-display uppercase tracking-wider shrink-0 ml-2">
+                  Xem thư
+                </span>
+              </button>
             </div>
           </motion.div>
         )}
