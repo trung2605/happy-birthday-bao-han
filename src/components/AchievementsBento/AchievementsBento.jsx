@@ -47,6 +47,8 @@ export default function AchievementsBento({ onOpenLightbox }) {
 
   const viewportRef = useRef(null);
   const targetScrollRef = useRef(0);
+  const floatScrollRef = useRef(0);
+  const manualPauseUntilRef = useRef(0);
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
   const dragStartScrollRef = useRef(0);
@@ -69,6 +71,7 @@ export default function AchievementsBento({ onOpenLightbox }) {
     if (!el) return;
     if (!isDraggingRef.current) {
       targetScrollRef.current = el.scrollLeft;
+      floatScrollRef.current = el.scrollLeft;
     }
     const maxScroll = Math.max(1, el.scrollWidth - el.clientWidth);
     const ratio = Math.min(1, Math.max(0, el.scrollLeft / maxScroll));
@@ -87,6 +90,7 @@ export default function AchievementsBento({ onOpenLightbox }) {
     if (!el) return;
     el.scrollLeft = 0;
     targetScrollRef.current = 0;
+    floatScrollRef.current = 0;
     setScrollProgress(0);
     setCurrentIndex(1);
   }, [selectedProjectId]);
@@ -100,10 +104,12 @@ export default function AchievementsBento({ onOpenLightbox }) {
     const animateScroll = () => {
       const diff = targetScrollRef.current - el.scrollLeft;
       if (Math.abs(diff) > 0.5) {
-        el.scrollLeft += diff * 0.22;
+        el.scrollLeft += diff * 0.25;
+        floatScrollRef.current = el.scrollLeft;
         rafId = requestAnimationFrame(animateScroll);
       } else {
         el.scrollLeft = targetScrollRef.current;
+        floatScrollRef.current = el.scrollLeft;
         rafId = null;
       }
     };
@@ -119,10 +125,10 @@ export default function AchievementsBento({ onOpenLightbox }) {
 
       if (!atStart && !atEnd) {
         e.preventDefault();
-        setAutoGlide(false);
+        manualPauseUntilRef.current = performance.now() + 450;
         targetScrollRef.current = Math.min(
           maxScroll,
-          Math.max(0, targetScrollRef.current + delta * 1.45)
+          Math.max(0, targetScrollRef.current + delta * 1.55)
         );
         if (!rafId) {
           rafId = requestAnimationFrame(animateScroll);
@@ -137,36 +143,46 @@ export default function AchievementsBento({ onOpenLightbox }) {
     };
   }, [displayedArtworks.length]);
 
-  // Gentle auto-glide + window vertical scroll linkage when not hovering
+  // Continuous fast auto-glide (always runs even when hovering or after wheel/drag!)
   useEffect(() => {
-    if (!autoGlide || isHoveringTrack) return;
+    if (!autoGlide) return;
     const el = viewportRef.current;
     if (!el) return;
 
+    floatScrollRef.current = el.scrollLeft;
     let rafId;
-    const step = () => {
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      if (maxScroll > 0) {
-        if (el.scrollLeft >= maxScroll - 2) {
-          el.scrollLeft = 0;
-          targetScrollRef.current = 0;
-        } else {
-          el.scrollLeft += 0.9;
-          targetScrollRef.current = el.scrollLeft;
+    let lastTime = performance.now();
+    const SPEED_PX_PER_SEC = 185; // Fast, lively gallery glide (~3px per frame at 60fps)
+
+    const step = (now) => {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      if (!isDraggingRef.current && now > manualPauseUntilRef.current) {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (maxScroll > 0) {
+          if (floatScrollRef.current >= maxScroll - 2) {
+            floatScrollRef.current = 0;
+            el.scrollLeft = 0;
+            targetScrollRef.current = 0;
+          } else {
+            floatScrollRef.current += SPEED_PX_PER_SEC * dt;
+            el.scrollLeft = floatScrollRef.current;
+            targetScrollRef.current = el.scrollLeft;
+          }
         }
       }
       rafId = requestAnimationFrame(step);
     };
     rafId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(rafId);
-  }, [autoGlide, isHoveringTrack, displayedArtworks.length]);
+  }, [autoGlide, displayedArtworks.length, exhibitionViewMode]);
 
   // Mouse drag-to-scroll support
   const handleMouseDown = (e) => {
     const el = viewportRef.current;
     if (!el) return;
     isDraggingRef.current = true;
-    setAutoGlide(false);
     dragStartXRef.current = e.pageX - el.offsetLeft;
     dragStartScrollRef.current = el.scrollLeft;
   };
@@ -178,6 +194,7 @@ export default function AchievementsBento({ onOpenLightbox }) {
     const walk = (x - dragStartXRef.current) * 1.6;
     viewportRef.current.scrollLeft = dragStartScrollRef.current - walk;
     targetScrollRef.current = viewportRef.current.scrollLeft;
+    floatScrollRef.current = viewportRef.current.scrollLeft;
   };
 
   const handleMouseUpOrLeave = () => {
@@ -187,11 +204,12 @@ export default function AchievementsBento({ onOpenLightbox }) {
   const shiftByCard = (dir) => {
     const el = viewportRef.current;
     if (!el) return;
-    setAutoGlide(false);
+    manualPauseUntilRef.current = performance.now() + 600;
     const maxScroll = el.scrollWidth - el.clientWidth;
-    const next = Math.min(maxScroll, Math.max(0, el.scrollLeft + dir * 420));
+    const next = Math.min(maxScroll, Math.max(0, el.scrollLeft + dir * 460));
     el.scrollTo({ left: next, behavior: 'smooth' });
     targetScrollRef.current = next;
+    floatScrollRef.current = next;
   };
 
   return (
@@ -654,9 +672,11 @@ export default function AchievementsBento({ onOpenLightbox }) {
                 Math.max(0, (e.clientX - rect.left) / rect.width)
               );
               const maxScroll = el.scrollWidth - el.clientWidth;
-              setAutoGlide(false);
-              el.scrollTo({ left: ratio * maxScroll, behavior: 'smooth' });
-              targetScrollRef.current = ratio * maxScroll;
+              manualPauseUntilRef.current = performance.now() + 600;
+              const next = ratio * maxScroll;
+              el.scrollTo({ left: next, behavior: 'smooth' });
+              targetScrollRef.current = next;
+              floatScrollRef.current = next;
             }}
             className="flex-1 h-2.5 rounded-full bg-cream/15 overflow-hidden cursor-pointer relative"
             title="Chạm để tua nhanh đến vị trí bất kỳ"

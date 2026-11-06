@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Briefcase,
@@ -180,6 +180,14 @@ export function DepthCarouselWithViewfinder({ artworks, onOpenLightbox }) {
 
   const total = artworks.length;
   const currentArt = artworks[activeIndex] || artworks[0];
+
+  useEffect(() => {
+    if (total <= 1) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % total);
+    }, 2200);
+    return () => clearInterval(timer);
+  }, [total]);
 
   const step = (dir) => {
     setActiveIndex((prev) => (prev + dir + total) % total);
