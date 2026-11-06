@@ -860,20 +860,20 @@ const CURATED_SAIGON_STATION_LEADS = {
       caption: "Bảo Hân ngồi ghế gỗ dưới tán cây xanh mát Thảo Cầm Viên",
     },
     {
-      src: "/memories/saigon/thaocamvien/zoo-11.jpg",
-      caption: "Nụ cười trong trẻo buổi sáng bên chú ngựa vằn đáng yêu",
+      src: "/memories/saigon/thaocamvien/zoo-09.jpg",
+      caption: "Chú hổ nằm ngủ nướng bình yên trong Thảo Cầm Viên",
     },
     {
-      src: "/memories/saigon/thaocamvien/zoo-13.jpg",
-      caption: "Khoảnh khắc bình yên dịu dàng giữa thiên nhiên Sài Gòn",
-    },
-    {
-      src: "/memories/saigon/thaocamvien/zoo-14.jpg",
-      caption: "Ánh nhìn tinh nghịch khi dạo chơi Thảo Cầm Viên",
+      src: "/memories/saigon/thaocamvien/zoo-02.jpg",
+      caption: "Nắng sớm xuyên qua tán lá xanh mát giữa lòng Sài Gòn",
     },
     {
       src: "/memories/saigon/thaocamvien/zoo-16.jpg",
       caption: "Đàn linh dương dưới nắng sớm trong lành",
+    },
+    {
+      src: "/memories/saigon/thaocamvien/zoo-07.jpg",
+      caption: "Khung cảnh thiên nhiên xanh mướt buổi sáng hẹn hò",
     },
     {
       src: "/memories/saigon/thaocamvien/zoo-18.jpg",

@@ -267,7 +267,7 @@ export default function LoveJourney({ onOpenLightbox }) {
   const handleTrackScroll = () => {
     const el = saigonViewportRef.current;
     if (!el) return;
-    if (!isDraggingRef.current) {
+    if (isDraggingRef.current) {
       targetScrollRef.current = el.scrollLeft;
       floatScrollRef.current = el.scrollLeft;
     }
@@ -326,6 +326,10 @@ export default function LoveJourney({ onOpenLightbox }) {
 
   // Continuous fast auto-glide (always runs even when hovering or after wheel/drag!)
   useEffect(() => {
+    setAutoGlide(true);
+  }, []);
+
+  useEffect(() => {
     if (!autoGlide) return;
     const el = saigonViewportRef.current;
     if (!el) return;
@@ -333,7 +337,7 @@ export default function LoveJourney({ onOpenLightbox }) {
     floatScrollRef.current = el.scrollLeft;
     let rafId;
     let lastTime = performance.now();
-    const SPEED_PX_PER_SEC = 185; // Fast continuous glide (~3px per frame at 60fps)
+    const SPEED_PX_PER_SEC = 380; // Fast continuous glide (~6.3px per frame at 60fps)
 
     const step = (now) => {
       const dt = Math.min(0.05, (now - lastTime) / 1000);
