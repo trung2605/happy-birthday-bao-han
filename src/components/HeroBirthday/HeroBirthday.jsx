@@ -21,6 +21,7 @@ import { heroProfile, marqueeItems } from '../../data/birthdayData';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import BunnyBirthdayCake3D from '../BunnyBirthdayCake3D/BunnyBirthdayCake3D';
+import { HoloCard, FlyingButton } from '../ReactBits/HoloCard';
 
 function Bunny3DEmblem({ className = 'w-6 h-6' }) {
   return (
@@ -390,14 +391,13 @@ export default function HeroBirthday({ onOpenLightbox }) {
               </p>
             </motion.div>
 
-            {/* 3D Bunny Photographer Mascot Card (@bunii.817 & @lop_thephotos) */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42 }}
+            {/* 3D Bunny Photographer Mascot Card (@bunii.817 & @lop_thephotos) wrapped in React Bits HoloCard */}
+            <HoloCard
+              intensity={8}
+              borderRadius="18px"
               onClick={() => onOpenLightbox?.('/scenes/bunny-photographer-3d.png')}
-              data-cursor-label="THỎ BÚN 3D"
-              className="group cursor-pointer p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-plum/95 via-[#21113d]/90 to-plum/95 border border-gold/35 flex items-center gap-4 shadow-[0_18px_45px_rgba(0,0,0,0.5)] hover:border-gold transition-all"
+              cursorLabel="THỎ BÚN 3D"
+              className="group cursor-pointer p-3.5 sm:p-4 rounded-[18px] bg-gradient-to-r from-plum/95 via-[#21113d]/90 to-plum/95 border border-gold/45 flex items-center gap-4 shadow-[0_18px_45px_rgba(0,0,0,0.5)] hover:border-gold transition-all"
             >
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-gold/60 shrink-0 bg-plum-deep shadow-lg">
                 <img
@@ -409,7 +409,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
               <div className="flex-1 min-w-0">
                 <div className="inline-flex items-center gap-1.5 text-[11px] font-display font-bold uppercase tracking-[0.18em] text-gold">
                   <Sparkles className="w-3.5 h-3.5 text-rose" />
-                  <span>LINH VẬT 3D // CÔ THỎ NHIẾP ẢNH GIA (@BUNII.817)</span>
+                  <span>HOLO CARD 3D // CÔ THỎ NHIẾP ẢNH GIA (@BUNII.817)</span>
                 </div>
                 <p className="font-script text-2xl sm:text-3xl text-cream mt-0.5 leading-tight">
                   Cô Thỏ Nhỏ Cầm Máy Ảnh Tuổi 19
@@ -419,7 +419,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
                   đam mê lưu giữ cái đẹp qua ống kính @lop_thephotos!
                 </p>
               </div>
-            </motion.div>
+            </HoloCard>
 
             {/* Editorial Stats Row */}
             <div className="grid grid-cols-3 gap-4 border-y border-cream/10 py-5">
@@ -502,29 +502,20 @@ export default function HeroBirthday({ onOpenLightbox }) {
 
           {/* Right Column: Full Uncropped Editorial Portrait + Switchable Thumbnails + Cake Stage */}
           <div className="lg:col-span-6 flex flex-col items-center gap-6">
-            <div
-              className="relative w-full max-w-[520px]"
-              style={{ perspective: '1200px' }}
-            >
-              {/* Main Portrait Card — Full 3:2 / 3:4 photo with ZERO overlapping elements covering her face */}
-              <animated.div
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+            <div className="relative w-full max-w-[520px]">
+              {/* Main Portrait Card — Wrapped in React Bits HoloCard with Rainbow Foil Glare */}
+              <HoloCard
+                intensity={10}
+                borderRadius="24px"
                 onClick={() => onOpenLightbox?.(activePhoto.src)}
-                data-cursor-label="XEM ẢNH"
-                style={{
-                  transform: tiltProps.rotateX.to(
-                    (rx) =>
-                      `rotateX(${rx}deg) rotateY(${tiltProps.rotateY.get()}deg) scale(${tiltProps.scale.get()})`
-                  ),
-                }}
+                cursorLabel="XEM ẢNH"
                 className="relative cursor-pointer p-3.5 sm:p-4 bg-cream text-plum-deep rounded-[24px] shadow-[0_28px_70px_rgba(0,0,0,0.65)] border-2 border-gold/60"
               >
                 {/* Top Header Strip Outside Photo */}
                 <div className="flex items-center justify-between gap-2 pb-2.5 px-1">
                   <span className="inline-flex items-center gap-1.5 text-[11px] font-display font-bold uppercase tracking-[0.16em] text-plum-deep/80">
                     <span className="w-2.5 h-2.5 bg-gold mask-four-star inline-block shrink-0" />
-                    <span>CHÂN DUNG TUỔI 19 • {activePhoto.label}</span>
+                    <span>HOLO CARD 3D • {activePhoto.label}</span>
                   </span>
                   <button
                     type="button"
@@ -593,7 +584,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
                     ))}
                   </div>
                 </div>
-              </animated.div>
+              </HoloCard>
             </div>
 
             {/* Interactive 3D WebGL Bunny Birthday Cake & Candles Stage */}
@@ -619,15 +610,14 @@ export default function HeroBirthday({ onOpenLightbox }) {
               {/* Controls Below the 3D Cake */}
               <div className="mt-3 pt-3 border-t border-cream/10 flex flex-col sm:flex-row items-center justify-between gap-3">
                 {candlesLit ? (
-                  <Button
-                    variant="default"
-                    size="default"
+                  <FlyingButton
+                    variant="gold"
                     onClick={handleBlowCandles}
-                    className="w-full shadow-[0_0_30px_rgba(252,188,91,0.4)]"
+                    className="w-full"
                   >
                     <Flame className="w-4 h-4" />
                     <span>Ước Một Điều & Thổi Tắt 5 Ngọn Nến 3D</span>
-                  </Button>
+                  </FlyingButton>
                 ) : (
                   <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5">
                     <p className="text-xs text-gold font-medium text-left">

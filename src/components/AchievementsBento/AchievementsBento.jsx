@@ -23,6 +23,10 @@ import {
   allPortfolioArtworks,
 } from '../../data/birthdayData';
 import { Badge } from '../ui/badge';
+import {
+  AccordionMilestoneGallery,
+  DepthCarouselWithViewfinder,
+} from '../ReactBits/AccordionAndDepthGallery';
 
 const ICON_MAP = {
   briefcase: Briefcase,
@@ -35,6 +39,8 @@ export default function AchievementsBento({ onOpenLightbox }) {
   const [activeAchievementId, setActiveAchievementId] = useState(
     achievementsData[0].id
   );
+  const [milestoneViewMode, setMilestoneViewMode] = useState('accordion'); // 'accordion' | 'split'
+  const [exhibitionViewMode, setExhibitionViewMode] = useState('reel'); // 'reel' | 'depth3d'
   const [selectedProjectId, setSelectedProjectId] = useState('all');
   const [autoGlide, setAutoGlide] = useState(true);
   const [isHoveringTrack, setIsHoveringTrack] = useState(false);
@@ -205,15 +211,49 @@ export default function AchievementsBento({ onOpenLightbox }) {
               </span>
             </h2>
           </div>
-          <p className="text-cream/75 max-w-md text-sm sm:text-base leading-relaxed">
-            Trước khi chính thức bước sang tuổi 19, nhìn lại một năm tuổi 18 với
-            công việc thực tập đầu tiên tại{' '}
-            <strong className="text-gold">AEON</strong>, hàng ngàn bức ảnh tại{' '}
-            <strong className="text-gold">@lop_thephotos</strong> và hành trình
-            đại học quốc tế tại Sài Gòn.
-          </p>
+          <div className="flex flex-col items-start md:items-end gap-3">
+            <p className="text-cream/75 max-w-md text-sm sm:text-base leading-relaxed">
+              Trước khi chính thức bước sang tuổi 19, nhìn lại một năm tuổi 18 với
+              công việc thực tập đầu tiên tại{' '}
+              <strong className="text-gold">AEON</strong>, hàng ngàn bức ảnh tại{' '}
+              <strong className="text-gold">@lop_thephotos</strong> và hành trình
+              đại học quốc tế tại Sài Gòn.
+            </p>
+            <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-plum/90 border border-gold/30">
+              <button
+                type="button"
+                onClick={() => setMilestoneViewMode('accordion')}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  milestoneViewMode === 'accordion'
+                    ? 'bg-gold text-plum-deep shadow'
+                    : 'text-cream/75 hover:text-cream'
+                }`}
+              >
+                Accordion Gallery (React Bits)
+              </button>
+              <button
+                type="button"
+                onClick={() => setMilestoneViewMode('split')}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  milestoneViewMode === 'split'
+                    ? 'bg-gold text-plum-deep shadow'
+                    : 'text-cream/75 hover:text-cream'
+                }`}
+              >
+                Bố Cục Chi Tiết
+              </button>
+            </div>
+          </div>
         </div>
 
+        {milestoneViewMode === 'accordion' ? (
+          <AccordionMilestoneGallery
+            items={achievementsData}
+            activeId={activeAchievement.id}
+            onSelect={setActiveAchievementId}
+            onOpenLightbox={onOpenLightbox}
+          />
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-14">
           {/* Left: Interactive Selector List with Monumental Numbers */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-3">
@@ -350,6 +390,7 @@ export default function AchievementsBento({ onOpenLightbox }) {
             </div>
           </div>
         </div>
+        )}
       </div>
 
       {/* PART 2: Horizontal Exhibition of ALL 39 Project Artworks (Native Wheel + Drag + Auto-Glide) */}
@@ -410,6 +451,28 @@ export default function AchievementsBento({ onOpenLightbox }) {
             <div className="flex items-center gap-1.5 ml-1">
               <button
                 type="button"
+                onClick={() =>
+                  setExhibitionViewMode((m) =>
+                    m === 'reel' ? 'depth3d' : 'reel'
+                  )
+                }
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  exhibitionViewMode === 'depth3d'
+                    ? 'bg-gold text-plum-deep shadow-lg'
+                    : 'bg-plum border border-gold/45 text-gold hover:bg-gold hover:text-plum-deep'
+                }`}
+                title="Chuyển đổi giữa Thanh Trượt Ngang và Vòng Xoay 3D + Khung Ngắm Máy Ảnh"
+              >
+                <Camera className="w-3.5 h-3.5" />
+                <span>
+                  {exhibitionViewMode === 'depth3d'
+                    ? 'Đang mở: Vòng Xoay 3D + Viewfinder'
+                    : 'Bật Vòng Xoay 3D + Viewfinder'}
+                </span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setAutoGlide((a) => !a)}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer ${
                   autoGlide
@@ -451,6 +514,13 @@ export default function AchievementsBento({ onOpenLightbox }) {
           </div>
         </div>
 
+        {exhibitionViewMode === 'depth3d' ? (
+          <DepthCarouselWithViewfinder
+            artworks={displayedArtworks}
+            onOpenLightbox={onOpenLightbox}
+          />
+        ) : (
+        <>
         {/* Horizontal Scrollable Track — 39 Project Artworks */}
         <div
           ref={viewportRef}
@@ -601,6 +671,8 @@ export default function AchievementsBento({ onOpenLightbox }) {
             {String(displayedArtworks.length).padStart(2, '0')} TÁC PHẨM
           </span>
         </div>
+        </>
+        )}
       </div>
     </section>
   );

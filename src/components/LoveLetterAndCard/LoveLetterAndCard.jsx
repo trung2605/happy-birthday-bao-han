@@ -16,6 +16,7 @@ import {
 import { loveLetter, heroProfile } from '../../data/birthdayData';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { FlyingButton } from '../ReactBits/HoloCard';
 
 export default function LoveLetterAndCard({
   onReplayIntro,
@@ -23,6 +24,7 @@ export default function LoveLetterAndCard({
 }) {
   const [flipped, setFlipped] = useState(false);
   const [readingLetter, setReadingLetter] = useState(false);
+  const [paperFolded, setPaperFolded] = useState(false);
   const voiceRef = useRef(null);
 
   useEffect(() => {
@@ -251,6 +253,15 @@ export default function LoveLetterAndCard({
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
+                  onClick={() => setPaperFolded((f) => !f)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider bg-amber-600/15 text-amber-900 border border-amber-700/35 hover:bg-amber-600/25 transition-all cursor-pointer"
+                  title="Hiệu ứng Paper Unfold (Gấp / Mở phong thư sáp vàng)"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+                  <span>{paperFolded ? 'Mở Niêm Phong Thư' : 'Gấp Phong Thư'}</span>
+                </button>
+                <button
+                  type="button"
                   onClick={toggleReadLetter}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all cursor-pointer ${
                     readingLetter
@@ -280,13 +291,38 @@ export default function LoveLetterAndCard({
               {loveLetter.title}
             </h3>
 
-            <div className="space-y-4 text-plum-deep/90 text-sm sm:text-base leading-relaxed">
-              {loveLetter.paragraphs.map((p, index) => (
-                <p key={index} className="leading-7">
-                  {p}
+            {paperFolded ? (
+              <motion.div
+                initial={{ opacity: 0, rotateX: -35, scale: 0.96 }}
+                animate={{ opacity: 1, rotateX: 0, scale: 1 }}
+                transition={{ duration: 0.45 }}
+                onClick={() => setPaperFolded(false)}
+                className="my-6 py-12 px-6 rounded-2xl bg-gradient-to-b from-[#f8e3c4] to-[#efd0a3] border-2 border-dashed border-amber-800/35 text-center cursor-pointer shadow-inner relative overflow-hidden group"
+              >
+                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#b91c1c] via-[#991b1b] to-[#450a0a] border-2 border-gold shadow-[0_8px_22px_rgba(153,27,27,0.5)] flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                  <Heart className="w-7 h-7 text-gold fill-gold" />
+                </div>
+                <p className="font-display font-black uppercase tracking-[0.22em] text-xs text-amber-950">
+                  NIÊM PHONG SÁP ĐỎ • GỬI RIÊNG BẢO HÂN TUỔI 19
                 </p>
-              ))}
-            </div>
+                <p className="font-script text-2xl text-plum-deep font-bold mt-1">
+                  Chạm vào con dấu sáp để mở bức thư tay của anh Trung
+                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, rotateX: -18 }}
+                animate={{ opacity: 1, rotateX: 0 }}
+                transition={{ duration: 0.45 }}
+                className="space-y-4 text-plum-deep/90 text-sm sm:text-base leading-relaxed"
+              >
+                {loveLetter.paragraphs.map((p, index) => (
+                  <p key={index} className="leading-7">
+                    {p}
+                  </p>
+                ))}
+              </motion.div>
+            )}
 
             <div className="mt-8 pt-6 border-t border-plum-deep/15 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
@@ -299,14 +335,13 @@ export default function LoveLetterAndCard({
               </div>
 
               <div className="flex flex-wrap items-center gap-2.5">
-                <Button
-                  variant="secondary"
-                  size="default"
+                <FlyingButton
                   onClick={handleGrandConfetti}
+                  className="bg-plum-deep text-gold px-5 py-2.5 text-xs font-display font-bold uppercase tracking-wider hover:bg-plum-deep/90 shadow-md"
                 >
                   <PartyPopper className="w-4 h-4 text-gold" />
-                  Bắn Pháo Hoa Chúc Mừng
-                </Button>
+                  <span>Bắn Pháo Hoa Chúc Mừng</span>
+                </FlyingButton>
                 {onReplayIntro && (
                   <Button
                     variant="outline"

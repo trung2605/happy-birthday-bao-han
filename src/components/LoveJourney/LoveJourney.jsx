@@ -20,6 +20,7 @@ import {
 import { coupleMemories, saigonChapters } from '../../data/birthdayData';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { HoloCard } from '../ReactBits/HoloCard';
 
 const CHAPTER_ICONS = {
   camera: Camera,
@@ -83,10 +84,18 @@ function ScatteredPolaroidBoard({ cards, onOpenLightbox }) {
       const preset = SCATTER_PRESETS[i % SCATTER_PRESETS.length];
       const dir = shuffleSeed % 2 === 0 ? 1 : -1;
       const isHovered = hoveredIdx === i;
+      const isNeighbor =
+        hoveredIdx !== null && Math.abs(i - hoveredIdx) === 1;
+      const neighborDir = hoveredIdx !== null ? Math.sign(i - hoveredIdx) : 0;
       return {
-        rot: isHovered ? 0 : preset.rot * dir,
-        y: isHovered ? -10 : preset.y,
-        scale: isHovered ? 1.05 : 1,
+        x: isHovered ? 0 : isNeighbor ? neighborDir * 14 : 0,
+        rot: isHovered
+          ? 0
+          : isNeighbor
+          ? preset.rot * dir + neighborDir * 4.2
+          : preset.rot * dir,
+        y: isHovered ? -12 : isNeighbor ? preset.y + 4 : preset.y,
+        scale: isHovered ? 1.06 : isNeighbor ? 0.98 : 1,
         config: { mass: 1.1, tension: 260, friction: 9 },
       };
     },
@@ -99,8 +108,8 @@ function ScatteredPolaroidBoard({ cards, onOpenLightbox }) {
       const randomRot = (i % 2 === 0 ? 1 : -1) * (3.5 + Math.random() * 4.5);
       const randomY = (Math.random() - 0.5) * 24;
       return {
-        from: { rot: -randomRot * 1.6 },
-        to: { rot: randomRot, y: randomY, scale: 1 },
+        from: { rot: -randomRot * 1.6, x: 0 },
+        to: { rot: randomRot, y: randomY, x: 0, scale: 1 },
         config: { mass: 1.2, tension: 280, friction: 8 },
       };
     });
@@ -128,7 +137,7 @@ function ScatteredPolaroidBoard({ cards, onOpenLightbox }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 sm:gap-9 items-start py-4">
-        {springs.map(({ rot, y, scale }, i) => {
+        {springs.map(({ x, rot, y, scale }, i) => {
           const card = cards[i];
           const imgW = card.width || (card.portrait ? 853 : 1280);
           const imgH = card.height || (card.portrait ? 1280 : 853);
@@ -147,7 +156,7 @@ function ScatteredPolaroidBoard({ cards, onOpenLightbox }) {
                 transformOrigin: '50% 10px',
                 transform: rot.to(
                   (r) =>
-                    `translate3d(0, ${y.get()}px, 0) rotateZ(${r}deg) scale(${scale.get()})`
+                    `translate3d(${x.get()}px, ${y.get()}px, 0) rotateZ(${r}deg) scale(${scale.get()})`
                 ),
                 zIndex: hoveredIdx === i ? 30 : 10,
               }}
@@ -395,7 +404,10 @@ export default function LoveJourney({ onOpenLightbox }) {
               </span>
             </h2>
           </div>
-          <div className="flex items-center gap-4 max-w-lg bg-plum/75 border border-gold/30 p-3.5 rounded-2xl backdrop-blur-md shadow-xl">
+          <HoloCard
+            maxTilt={7}
+            className="flex items-center gap-4 max-w-lg bg-plum/75 border border-gold/30 p-3.5 rounded-2xl backdrop-blur-md shadow-xl"
+          >
             <div
               onClick={() => onOpenLightbox?.('/scenes/bunny-couple-3d.png')}
               className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-gold/60 shrink-0 cursor-pointer group bg-plum-deep"
@@ -412,7 +424,7 @@ export default function LoveJourney({ onOpenLightbox }) {
               Trung vào Sài Gòn thăm cô Thỏ nhỏ — mỗi tấm hình Polaroid đều đung
               đưa ở một góc riêng biệt, không chồng lấn.
             </p>
-          </div>
+          </HoloCard>
         </div>
 
         {/* Part 1: Scattered Polaroid Board — "Mỗi tấm một nơi" */}

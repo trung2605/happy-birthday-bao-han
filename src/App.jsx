@@ -14,6 +14,13 @@ import HeroBirthday from './components/HeroBirthday/HeroBirthday';
 import AchievementsBento from './components/AchievementsBento/AchievementsBento';
 import LoveJourney from './components/LoveJourney/LoveJourney';
 import LoveLetterAndCard from './components/LoveLetterAndCard/LoveLetterAndCard';
+import ClickSpark from './components/ReactBits/ClickSpark';
+import LiveLoveCounter from './components/ReactBits/LiveLoveCounter';
+import BirthdayVoucherBook from './components/ReactBits/TearTicket';
+import {
+  FloatingDock,
+  VinylMusicPlayer,
+} from './components/ReactBits/VinylMusicPlayer';
 import CustomCursor from './components/ui/CustomCursor';
 import { Dialog, DialogContent, DialogTitle } from './components/ui/dialog';
 
@@ -98,8 +105,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-plum-deep text-cream selection:bg-gold selection:text-plum-deep relative">
-      {/* Interactive Custom Cursor (modeled after giaimamanhai.vercel.app) */}
+      {/* Interactive Custom Cursor + React Bits ClickSpark */}
       <CustomCursor />
+      <ClickSpark />
 
       {!introCompleted ? (
         <SpookyIntro
@@ -188,15 +196,24 @@ export default function App() {
           </header>
 
           {/* Main Celebration Sections */}
-          <main className="relative z-10">
+          <main className="relative z-10 pb-16">
             <HeroBirthday onOpenLightbox={setLightboxImage} />
             <AchievementsBento onOpenLightbox={setLightboxImage} />
+            <LiveLoveCounter />
             <LoveJourney onOpenLightbox={setLightboxImage} />
+            <BirthdayVoucherBook />
             <LoveLetterAndCard
               onReplayIntro={handleReplayIntro}
               onDuckCelebrationMusic={handleDuckCelebrationMusic}
             />
           </main>
+
+          {/* React Bits Floating Magnification Dock & Spinning Vinyl Record Player */}
+          <FloatingDock />
+          <VinylMusicPlayer
+            musicMuted={!musicPlaying}
+            onToggleMute={toggleMusic}
+          />
 
           {/* Footer */}
           <footer className="relative z-10 py-12 px-4 border-t border-gold/20 text-center bg-plum-deep/90 backdrop-blur-md">
@@ -225,11 +242,22 @@ export default function App() {
                 Xem ảnh kỷ niệm Lưu Nguyễn Bảo Hân
               </DialogTitle>
               {lightboxImage && (
-                <img
-                  src={lightboxImage}
-                  alt="Kỷ niệm Bảo Hân"
-                  className="max-w-full max-h-[85vh] rounded-2xl object-contain border-2 border-gold/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
-                />
+                <div className="flex flex-col items-center gap-2.5">
+                  <div className="flex items-center justify-between gap-4 px-4 py-1.5 rounded-full bg-plum-deep/90 border border-gold/40 text-[11px] font-display font-bold uppercase tracking-[0.18em] text-gold">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      AF-C • EYE DETECT [BẢO HÂN]
+                    </span>
+                    <span className="hidden sm:inline text-cream/75">
+                      RAW 14-BIT • 50MM F/1.4 GM • @LOP_THEPHOTOS
+                    </span>
+                  </div>
+                  <img
+                    src={lightboxImage}
+                    alt="Kỷ niệm Bảo Hân"
+                    className="max-w-full max-h-[82vh] rounded-2xl object-contain border-2 border-gold/50 shadow-[0_25px_80px_rgba(0,0,0,0.85)]"
+                  />
+                </div>
               )}
             </DialogContent>
           </Dialog>
