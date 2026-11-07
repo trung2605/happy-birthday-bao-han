@@ -52,8 +52,17 @@ export default function LoveLetterAndCard({
       onDuckCelebrationMusic?.(false);
     };
     audio.onerror = () => {
-      setReadingLetter(false);
-      onDuckCelebrationMusic?.(false);
+      if (isLetter && url !== '/audio/New Recording 30.m4a') {
+        audio.src = '/audio/New Recording 30.m4a';
+        audio.load();
+        audio.play().catch(() => {
+          setReadingLetter(false);
+          onDuckCelebrationMusic?.(false);
+        });
+      } else {
+        setReadingLetter(false);
+        onDuckCelebrationMusic?.(false);
+      }
     };
     audio.play().catch(() => {
       setReadingLetter(false);
@@ -67,7 +76,7 @@ export default function LoveLetterAndCard({
       setReadingLetter(false);
       onDuckCelebrationMusic?.(false);
     } else {
-      playAiVoiceClip('/audio/voice/cassette-wish.m4a', true);
+      playAiVoiceClip('/audio/voice/love-letter.m4a', true);
     }
   };
 

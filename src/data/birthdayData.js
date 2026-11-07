@@ -475,15 +475,16 @@ export const saigonTripAlbums = [
 // CHƯƠNG 5: BỨC THƯ TAY & THIỆP 3D LẬT MỞ
 // ----------------------------------------------------------------------------
 export const loveLetterContent = {
-  greeting: "Gửi Lưu Nguyễn Bảo Hân — cô gái tháng 11 của anh,",
+  greeting: "Gửi Lưu Nguyễn Bảo Hân — cô gái Bọ Cạp tháng 11 của anh! 💖♏",
   paragraphs: [
-    "Chúc mừng sinh nhật tuổi 19 của em (08/11/2007)! Vậy là cô gái nhỏ của anh lại đón thêm một tuổi mới thật rực rỡ. Nhìn lại chặng đường vừa qua, anh luôn tràn ngập niềm tự hào khi thấy em không ngừng lớn lên, bản lĩnh và tỏa sáng theo cách riêng của mình.",
-    "Tuổi 18 khép lại với biết bao dấu ấn đáng nhớ: từ những ngày nỗ lực học tập ở Đà Nẵng để bước chân vào giảng đường Western Sydney University Vietnam tại Sài Gòn, những ngày chạy show chụp ảnh không biết mệt mỏi cho @lop_thephotos, những bộ ảnh nghệ thuật đầy tâm huyết trên portfolio, cho đến công việc thực tập đầu tiên tại AEON. Dù đôi lúc bận rộn và vất vả, em vẫn luôn giữ được nụ cười ấm áp và đôi mắt lấp lánh đam mê.",
-    "Cảm ơn em vì hành trình 1 năm yêu nhau thật đẹp của hai đứa mình. Cảm ơn những ngày ở Đà Nẵng, và cả những ngày anh vào Sài Gòn — từ ga Metro Bến Thành, cánh đồng ánh sáng Van Gogh, Thảo Cầm Viên xanh mát cho đến buổi chụp hình ôm bó hoa hồng phấn. Khoảng cách địa lý chưa bao giờ làm vơi đi thương nhớ, mà chỉ làm cho mỗi giây phút được ở cạnh nhau trở nên quý giá hơn gấp bội.",
-    "Bước sang tuổi 19, anh chúc em luôn thật nhiều sức khỏe, giữ vững ngọn lửa đam mê nhiếp ảnh và truyền thông, hoàn thành thật tốt kỳ thực tập tại AEON và luôn cảm thấy bình yên vì phía sau ống kính của em luôn có anh đồng hành.",
+    "Chúc mừng sinh nhật tuổi 19 của em! 🎂✨ Vậy là cô gái nhỏ của anh lại đón thêm một tuổi mới thật là rực rỡ. Nhìn lại chặng đường đã qua thì anh rất là tự hào, vì thấy em không ngừng lớn lên, bản lĩnh hơn và tỏa sáng hơn theo cách riêng của mình. 🌟",
+    "Tuổi 18 của em khép lại với rất nhiều kỷ niệm đáng nhớ 💫: từ những ngày nỗ lực học tập ở Đà Nẵng, sau đó là bước chân vô Western Sydney University — một ngôi trường đại học xịn xò tại Sài Gòn 🎓🏢. Tại đó là những ngày chạy show chụp ảnh không biết mệt mỏi cho @lop_thephotos 📸🎞️, tạo nên những bộ ảnh nghệ thuật đầy tâm huyết cho portfolio của mình; cho đến những công việc thực tập đầu tiên tại AEON, và cả việc em dạy IELTS cho mấy đứa nhỏ nữa 💼📚.",
+    "Đôi lúc là bận rộn và vất vả lắm, nhưng mà lúc nào em cũng cười tươi, lúc nào em cũng đáng yêu hết trơn á 🥰🐰! Em rất là đam mê với công việc, và anh rất là yêu điều đó ở em. ❤️",
+    "Cảm ơn em vì hành trình đẹp đó, và cũng là hành trình 1 năm yêu nhau thật hạnh phúc của hai đứa mình 💑🌷. Cảm ơn em những ngày ở Đà Nẵng, những ngày hẹn hò ở ga Metro Bến Thành 🚇, ở Bảo tàng Van Gogh 🌻✨, ở Thảo Cầm Viên 🐅🌿, và ở rất là nhiều địa điểm kỷ niệm khác nữa... Nói chung là, đây là một tình yêu rất là tuyệt vời, và anh không nghĩ là mình lại có một tình yêu đẹp và trọn vẹn đến như thế này! 💌🕊️",
+    "Bước sang tuổi 19, anh chúc em sẽ có thật là nhiều sức khỏe 💪🌸, luôn giữ vững được ngọn lửa đam mê nhiếp ảnh 📷, đam mê kinh tế 📈, đam mê tâm lý 🧠 và phát huy trọn vẹn mọi tài năng của mình ✨. Chúc em sẽ thật thành công trên con đường sắp tới của mình nhé! 🎉🎁",
   ],
-  signOff: "Thương em rất nhiều,",
-  signature: "Anh Trung",
+  signOff: "Yêu và thương em rất nhiều 💕,",
+  signature: "Anh Trung 🐰❤️",
 };
 
 export const flipCardContent = {
