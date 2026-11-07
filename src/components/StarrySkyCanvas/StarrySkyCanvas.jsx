@@ -95,7 +95,7 @@ export default function StarrySkyCanvas() {
         const alpha = 0.3 + 0.7 * Math.abs(Math.sin((t / 1000) * s.f + s.s));
         x.fillStyle = `rgba(255, 250, 235, ${alpha})`;
         x.beginPath();
-        x.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        x.arc(s.x, s.y, Math.max(0.1, s.r || 0.5), 0, Math.PI * 2);
         x.fill();
       }
 

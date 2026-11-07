@@ -50,12 +50,13 @@ export default function ClickSpark({
 
       sparksRef.current = sparksRef.current.filter((spark) => {
         const elapsed = now - spark.startTime;
+        if (elapsed < 0) return true;
         if (elapsed >= duration) return false;
 
-        const progress = elapsed / duration;
+        const progress = Math.max(0, Math.min(1, elapsed / duration));
         const eased = progress * (2 - progress);
-        const dist = eased * spark.radius;
-        const lineLen = sparkSize * (1 - eased);
+        const dist = Math.max(0, eased * spark.radius);
+        const lineLen = Math.max(0, sparkSize * (1 - eased));
 
         const x1 = spark.x + dist * Math.cos(spark.angle);
         const y1 = spark.y + dist * Math.sin(spark.angle);
@@ -66,7 +67,7 @@ export default function ClickSpark({
         ctx.strokeStyle = spark.color;
         ctx.shadowColor = spark.color;
         ctx.shadowBlur = 8;
-        ctx.lineWidth = 2.2 * (1 - progress * 0.5);
+        ctx.lineWidth = Math.max(0.1, 2.2 * (1 - progress * 0.5));
         ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -74,10 +75,11 @@ export default function ClickSpark({
         ctx.stroke();
 
         // Center micro ring on early frames
-        if (progress < 0.45) {
+        if (progress < 0.45 && dist > 0) {
+          const ringRadius = Math.max(0.01, dist * 0.45);
           ctx.beginPath();
-          ctx.arc(spark.x, spark.y, dist * 0.45, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(252, 188, 91, ${0.45 * (1 - progress * 2)})`;
+          ctx.arc(spark.x, spark.y, ringRadius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(252, 188, 91, ${Math.max(0, 0.45 * (1 - progress * 2))})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
