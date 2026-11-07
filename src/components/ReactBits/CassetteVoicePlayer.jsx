@@ -13,7 +13,7 @@ import {
   Music,
   Radio,
 } from 'lucide-react';
-import { HoloCard, FlyingButton } from './HoloCard';
+import { FlyingButton } from './HoloCard';
 
 /**
  * Interactive Vintage Cassette Tape Player ("Cuốn Băng Cassette Tuổi 19 Của Anh Trung")
@@ -261,10 +261,7 @@ export default function CassetteVoicePlayer({
         className="relative z-20 pt-2 pb-12 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-5xl mx-auto">
-          <HoloCard
-            maxTilt={4}
-            className="rounded-[34px] bg-gradient-to-b from-[#2A154B]/95 via-[#1C0D36]/95 to-plum-deep/95 border-2 border-gold/60 p-5 sm:p-8 shadow-[0_28px_85px_rgba(0,0,0,0.75)] backdrop-blur-xl"
-          >
+          <div className="rounded-[34px] bg-gradient-to-b from-[#2A154B]/95 via-[#1C0D36]/95 to-plum-deep/95 border-2 border-gold/60 p-5 sm:p-8 shadow-[0_28px_85px_rgba(0,0,0,0.75)] backdrop-blur-xl">
             {/* Header Strip */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-6 border-b border-gold/25">
               <div>
@@ -562,7 +559,7 @@ export default function CassetteVoicePlayer({
                 </div>
               </div>
             </div>
-          </HoloCard>
+          </div>
         </div>
       </section>
 
