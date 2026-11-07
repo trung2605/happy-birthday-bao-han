@@ -312,7 +312,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
               </Badge>
               <Badge variant="rose" className="gap-1.5 py-1.5 px-3.5">
                 <Bunny3DEmblem className="w-4 h-4" />
-                <span>THỎ BÚN @BUNII.817 • TUỔI 19</span>
+                <span>THỎ CON @BUNII.817 • TUỔI 19</span>
               </Badge>
             </motion.div>
 
@@ -396,13 +396,13 @@ export default function HeroBirthday({ onOpenLightbox }) {
               intensity={8}
               borderRadius="18px"
               onClick={() => onOpenLightbox?.('/scenes/bunny-photographer-3d.png')}
-              cursorLabel="THỎ BÚN 3D"
+              cursorLabel="THỎ CON 3D"
               className="group cursor-pointer p-3.5 sm:p-4 rounded-[18px] bg-gradient-to-r from-plum/95 via-[#21113d]/90 to-plum/95 border border-gold/45 flex items-center gap-4 shadow-[0_18px_45px_rgba(0,0,0,0.5)] hover:border-gold transition-all"
             >
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-gold/60 shrink-0 bg-plum-deep shadow-lg">
                 <img
                   src="/scenes/bunny-photographer-3d.png"
-                  alt="Thỏ Bún 3D Photographer @bunii.817"
+                  alt="Thỏ Con 3D Photographer @bunii.817"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
@@ -592,7 +592,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-display font-bold uppercase tracking-[0.18em] text-gold flex items-center gap-2">
                   <Bunny3DEmblem className="w-5 h-5" />
-                  <span>Bánh Kem Thỏ Bún 3D • Tuổi 19</span>
+                  <span>Bánh Kem Thỏ Con 3D • Tuổi 19</span>
                 </span>
                 <Badge variant="gold" className="text-[10px] px-2.5 py-0.5">
                   3D TƯƠNG TÁC 360°
@@ -604,7 +604,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
                 candlesLit={candlesLit}
                 onBlowOut={handleBlowCandles}
                 heightClass="h-[270px] sm:h-[310px]"
-                interactiveHint="Kéo chuột để xoay chú Thỏ Bún 3D • Chạm vào bánh để thổi nến"
+                interactiveHint="Kéo chuột để xoay chú Thỏ Con 3D • Chạm vào bánh để thổi nến"
               />
 
               {/* Controls Below the 3D Cake */}
@@ -621,7 +621,7 @@ export default function HeroBirthday({ onOpenLightbox }) {
                 ) : (
                   <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5">
                     <p className="text-xs text-gold font-medium text-left">
-                      Chú Thỏ Bún 3D đang nhảy mừng điều ước tuổi 19 của Bảo Hân!
+                      Chú Thỏ Con 3D đang nhảy mừng điều ước tuổi 19 của Bảo Hân!
                     </p>
                     <div className="flex items-center gap-2 shrink-0">
                       <Button

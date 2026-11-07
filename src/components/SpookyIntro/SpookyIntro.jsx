@@ -337,7 +337,7 @@ function PreMainCakeCeremony({ onEnterMainPage, playVoiceClip }) {
         <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left">
           <Badge variant="gold" className="mb-3 gap-1.5 px-3.5 py-1">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>NGHI THỨC THỔI NẾN 3D • THỎ BÚN 19</span>
+            <span>NGHI THỨC THỔI NẾN 3D • THỎ CON 19</span>
           </Badge>
 
           {/* Portrait Circle with Confetti SVG & Birthday Cap SVG */}
@@ -368,8 +368,8 @@ function PreMainCakeCeremony({ onEnterMainPage, playVoiceClip }) {
           </h2>
           <p className="text-cream/85 text-xs sm:text-sm mt-2 leading-relaxed">
             {candlesLit
-              ? 'Chiếc bánh kem 3D có chú Thỏ Bún (@bunii.817) đội vương miện vàng đang đợi em! Hãy nhắm mắt ước một điều thật đẹp cho tuổi 19 rồi thổi tắt 5 ngọn nến nhé!'
-              : 'Điều ước tuổi 19 của Lưu Nguyễn Bảo Hân đã bay lên bầu trời đêm đầy sao! Chú Thỏ Bún cũng đang nhảy tưng bừng chúc mừng công chúa nhỏ của anh!'}
+              ? 'Chiếc bánh kem 3D có chú Thỏ Con (@bunii.817) đội vương miện vàng đang đợi em! Hãy nhắm mắt ước một điều thật đẹp cho tuổi 19 rồi thổi tắt 5 ngọn nến nhé!'
+              : 'Điều ước tuổi 19 của Lưu Nguyễn Bảo Hân đã bay lên bầu trời đêm đầy sao! Chú Thỏ Con cũng đang nhảy tưng bừng chúc mừng công chúa nhỏ của anh!'}
           </p>
 
           {/* Action Buttons: Blow Out Candles OR Enter Main Page */}

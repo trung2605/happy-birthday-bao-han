@@ -34,7 +34,7 @@ const CASSETTE_TRACKS = [
   {
     id: 'cake-wish',
     side: 'SIDE A • 02',
-    title: 'Lời Chúc Nghi Thức Thổi Nến Bánh Kem Thỏ Bún 3D',
+    title: 'Lời Chúc Nghi Thức Thổi Nến Bánh Kem Thỏ Con 3D',
     subtitle: 'Khoảnh khắc ước nguyện tuổi 19 dưới bầu trời sao',
     primarySrc: '/audio/tts/cake-intro.mp3',
     fallbackSrc: '/audio/tts/cake-intro.mp3',

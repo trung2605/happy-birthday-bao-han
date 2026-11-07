@@ -215,7 +215,7 @@ export default function LoveLetterAndCard({
                   <div className="w-24 h-24 mx-auto rounded-2xl overflow-hidden border-2 border-gold shadow-[0_0_25px_rgba(252,188,91,0.4)] bg-plum">
                     <img
                       src="/scenes/bunny-cake-3d.png"
-                      alt="Bánh Kem Thỏ Bún 3D"
+                      alt="Bánh Kem Thỏ Con 3D"
                       className="w-full h-full object-cover"
                     />
                   </div>

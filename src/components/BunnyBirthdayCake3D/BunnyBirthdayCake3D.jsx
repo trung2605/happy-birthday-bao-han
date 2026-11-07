@@ -36,7 +36,7 @@ function createPlaqueTexture() {
 
   ctx.font = 'bold 26px serif';
   ctx.fillStyle = '#4a153b';
-  ctx.fillText('THỎ BÚN • 08.11.2007', 256, 132);
+  ctx.fillText('THỎ CON • 08.11.2007', 256, 132);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -46,7 +46,7 @@ function createPlaqueTexture() {
 /**
  * BunnyBirthdayCake3D
  * Studio-lit HDRI WebGL 3D Multi-Tier Birthday Cake using Three.js + OrbitControls + RoomEnvironment
- * + RoundedBoxGeometry + 3D Chibi White Bunny ("Thỏ Bún @bunii.817") wearing a pink bow, golden crown,
+ * + RoundedBoxGeometry + 3D Chibi White Bunny ("Thỏ Con @bunii.817") wearing a pink bow, golden crown,
  * mini 3D camera, and hugging a glowing 3D heart, plus an optional 3D Pixar Render showcase mode.
  */
 export default function BunnyBirthdayCake3D({
@@ -447,7 +447,7 @@ export default function BunnyBirthdayCake3D({
     }
 
     // -------------------------------------------------------------------------
-    // D. SCULPTED 3D CHIBI WHITE BUNNY ("THỎ BÚN @bunii.817") ON TOP OF CAKE
+    // D. SCULPTED 3D CHIBI WHITE BUNNY ("THỎ CON @bunii.817") ON TOP OF CAKE
     // -------------------------------------------------------------------------
     const bunnyGroup = new THREE.Group();
     bunnyGroup.position.set(0, tier2TopY + 0.04, 0);
@@ -974,7 +974,7 @@ export default function BunnyBirthdayCake3D({
           }`}
         >
           <ImageIcon className="w-3.5 h-3.5" />
-          <span>Ảnh 3D Pixar Thỏ Bún</span>
+          <span>Ảnh 3D Pixar Thỏ Con</span>
         </button>
       </div>
 
@@ -989,19 +989,19 @@ export default function BunnyBirthdayCake3D({
           onClick={() => {
             if (candlesLit) onBlowOut?.();
           }}
-          data-cursor-label={candlesLit ? 'THỔI NẾN 3D' : 'THỎ BÚN 3D'}
+          data-cursor-label={candlesLit ? 'THỔI NẾN 3D' : 'THỎ CON 3D'}
           className={`w-full ${heightClass} relative flex items-center justify-center p-2 cursor-pointer group`}
         >
           <div className="relative h-full aspect-square max-h-full rounded-[28px] overflow-hidden border-2 border-gold/60 shadow-[0_20px_60px_rgba(252,188,91,0.3)] bg-plum-deep">
             <img
               src="/scenes/bunny-cake-3d.png"
-              alt="Bánh Kem Thỏ Bún 3D Tuổi 19"
+              alt="Bánh Kem Thỏ Con 3D Tuổi 19"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute bottom-2.5 inset-x-3 px-3 py-1.5 rounded-full bg-plum-deep/85 border border-gold/40 backdrop-blur-md text-[11px] font-display font-bold uppercase tracking-wider text-gold text-center">
               {candlesLit
                 ? 'Chạm vào Bánh Kem Thỏ 3D để thổi nến!'
-                : 'Thỏ Bún 3D chúc mừng tuổi 19 của Bảo Hân!'}
+                : 'Thỏ Con 3D chúc mừng tuổi 19 của Bảo Hân!'}
             </div>
           </div>
         </div>
