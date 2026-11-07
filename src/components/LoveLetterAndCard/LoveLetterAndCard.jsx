@@ -303,6 +303,28 @@ export default function LoveLetterAndCard({ onReplayIntro }) {
               </div>
 
               <div className="flex flex-wrap items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={toggleReadLetter}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-display font-bold uppercase tracking-wider transition-all cursor-pointer shadow-md ${
+                    readingLetter
+                      ? 'bg-rose text-plum-deep animate-pulse'
+                      : 'bg-gold text-plum-deep hover:bg-amber-300'
+                  }`}
+                  title="Bật/Tạm dừng nghe giọng anh Trung đọc lá thư này"
+                >
+                  {readingLetter ? (
+                    <>
+                      <Pause className="w-4 h-4 fill-plum-deep" />
+                      <span>Tạm Dừng Giọng Đọc</span>
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 className="w-4 h-4 text-plum-deep" />
+                      <span>Nghe Anh Trung Đọc Thư</span>
+                    </>
+                  )}
+                </button>
                 <FlyingButton
                   onClick={handleGrandConfetti}
                   className="bg-plum-deep text-gold px-5 py-2.5 text-xs font-display font-bold uppercase tracking-wider hover:bg-plum-deep/90 shadow-md"
