@@ -156,7 +156,7 @@ export default function AchievementsBento({ onOpenLightbox }) {
     floatScrollRef.current = el.scrollLeft;
     let rafId;
     let lastTime = performance.now();
-    const SPEED_PX_PER_SEC = 380; // Fast, lively gallery glide (~6.3px per frame at 60fps)
+    const SPEED_PX_PER_SEC = 160; // Smooth, relaxed continuous glide (~2.6px per frame at 60fps)
 
     const step = (now) => {
       const dt = Math.min(0.05, (now - lastTime) / 1000);
