@@ -75,17 +75,17 @@ export default function CassetteVoicePlayer() {
   const currentTrack = CASSETTE_TRACKS[activeTrackIdx] || CASSETTE_TRACKS[0];
 
   const currentTime = isCurrentCassette ? activeVoice.currentTime : 0;
-  const duration = isCurrentCassette
-    ? activeVoice.duration
-    : activeTrackIdx === 0
-    ? 85
-    : 35;
+  const duration =
+    isCurrentCassette && activeVoice.duration > 0
+      ? activeVoice.duration
+      : 85;
 
   const togglePlay = () => {
     if (isCurrentCassette) {
       globalTogglePlay();
     } else {
-      const track = CASSETTE_TRACKS[selectedIdx];
+      const track = CASSETTE_TRACKS[selectedIdx] || CASSETTE_TRACKS[0];
+      if (!track) return;
       playTrack({
         source: 'cassette',
         trackId: track.id,
@@ -94,7 +94,7 @@ export default function CassetteVoicePlayer() {
         side: track.side,
         primarySrc: track.primarySrc,
         fallbackSrc: track.fallbackSrc,
-        trackIdx: selectedIdx,
+        trackIdx: 0,
       });
     }
   };

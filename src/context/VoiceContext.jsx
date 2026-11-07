@@ -16,7 +16,7 @@ export const CASSETTE_TRACKS = [
     title: 'Lời Chúc & Tâm Tình Tuổi 19 Anh Trung Gửi Bảo Hân',
     subtitle: 'Giọng đọc thật của Anh Trung trên nền nhạc sinh nhật',
     primarySrc: '/audio/voice/cassette-wish.m4a',
-    fallbackSrc: '/audio/New Recording 29.m4a',
+    fallbackSrc: '/audio/cassette-wish.m4a',
   },
 ];
 
@@ -26,7 +26,7 @@ export const LETTER_TRACK = {
   title: 'Anh Trung Đang Đọc Thư Tay Gửi Bảo Hân',
   subtitle: 'Tâm thư tuổi 19 đầy yêu thương & kỷ niệm',
   primarySrc: '/audio/voice/love-letter.m4a',
-  fallbackSrc: '/audio/New Recording 30.m4a',
+  fallbackSrc: '/audio/love-letter.m4a',
 };
 
 export function VoiceProvider({
@@ -45,21 +45,33 @@ export function VoiceProvider({
     currentTime: 0,
     duration: 0,
     trackIdx: 0,
+    primarySrc: '',
+    fallbackSrc: '',
   });
 
   const audioRef = useRef(null);
   const fallbackTriedRef = useRef(false);
+  const onDuckRef = useRef(onDuckCelebrationMusic);
+  const onEnsureBgmRef = useRef(onEnsureBgmPlaying);
 
-  // Stop and cleanup when unmounting
+  useEffect(() => {
+    onDuckRef.current = onDuckCelebrationMusic;
+  }, [onDuckCelebrationMusic]);
+
+  useEffect(() => {
+    onEnsureBgmRef.current = onEnsureBgmPlaying;
+  }, [onEnsureBgmPlaying]);
+
+  // Stop and cleanup ONLY when VoiceProvider truly unmounts from DOM
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
       }
-      onDuckCelebrationMusic?.(false);
+      onDuckRef.current?.(false);
     };
-  }, [onDuckCelebrationMusic]);
+  }, []);
 
   const stopVoice = useCallback(() => {
     if (audioRef.current) {
@@ -72,13 +84,13 @@ export function VoiceProvider({
       isPlaying: false,
       currentTime: 0,
     }));
-    onDuckCelebrationMusic?.(false);
-  }, [onDuckCelebrationMusic]);
+    onDuckRef.current?.(false);
+  }, []);
 
   const playTrack = useCallback(
     ({ source, trackId, title, subtitle, side, primarySrc, fallbackSrc, trackIdx = 0 }) => {
-      onEnsureBgmPlaying?.();
-      onDuckCelebrationMusic?.(true);
+      onEnsureBgmRef.current?.();
+      onDuckRef.current?.(true);
 
       if (audioRef.current) {
         audioRef.current.pause();
@@ -90,7 +102,7 @@ export function VoiceProvider({
 
       fallbackTriedRef.current = false;
       const audio = new Audio(primarySrc);
-      audio.preload = 'metadata';
+      audio.preload = 'auto';
       audio.volume = 1.0;
       audioRef.current = audio;
 
@@ -111,30 +123,21 @@ export function VoiceProvider({
 
       const attachHandlers = (el) => {
         el.onloadedmetadata = () => {
-          setActiveVoice((v) => ({ ...v, duration: el.duration || 0 }));
+          if (el.duration && Number.isFinite(el.duration) && el.duration > 0) {
+            setActiveVoice((v) => ({ ...v, duration: el.duration }));
+          }
         };
         el.ontimeupdate = () => {
-          setActiveVoice((v) => ({ ...v, currentTime: el.currentTime || 0 }));
+          const d = el.duration;
+          setActiveVoice((v) => ({
+            ...v,
+            currentTime: el.currentTime || 0,
+            duration: Number.isFinite(d) && d > 0 ? d : v.duration,
+          }));
         };
         el.onended = () => {
-          // If cassette track 0 or 1, can auto advance
-          if (source === 'cassette' && trackIdx < CASSETTE_TRACKS.length - 1) {
-            const nextIdx = trackIdx + 1;
-            const nextTrack = CASSETTE_TRACKS[nextIdx];
-            playTrack({
-              source: 'cassette',
-              trackId: nextTrack.id,
-              title: nextTrack.title,
-              subtitle: nextTrack.subtitle,
-              side: nextTrack.side,
-              primarySrc: nextTrack.primarySrc,
-              fallbackSrc: nextTrack.fallbackSrc,
-              trackIdx: nextIdx,
-            });
-          } else {
-            setActiveVoice((v) => ({ ...v, isPlaying: false, currentTime: 0 }));
-            onDuckCelebrationMusic?.(false);
-          }
+          setActiveVoice((v) => ({ ...v, isPlaying: false, currentTime: 0 }));
+          onDuckRef.current?.(false);
         };
         el.onerror = () => {
           if (!fallbackTriedRef.current && fallbackSrc) {
@@ -143,11 +146,11 @@ export function VoiceProvider({
             el.load();
             el.play().catch(() => {
               setActiveVoice((v) => ({ ...v, isPlaying: false }));
-              onDuckCelebrationMusic?.(false);
+              onDuckRef.current?.(false);
             });
           } else {
             setActiveVoice((v) => ({ ...v, isPlaying: false }));
-            onDuckCelebrationMusic?.(false);
+            onDuckRef.current?.(false);
           }
         };
       };
@@ -169,39 +172,48 @@ export function VoiceProvider({
               .then(() => setActiveVoice((v) => ({ ...v, isPlaying: true })))
               .catch(() => {
                 setActiveVoice((v) => ({ ...v, isPlaying: false }));
-                onDuckCelebrationMusic?.(false);
+                onDuckRef.current?.(false);
               });
           } else {
             setActiveVoice((v) => ({ ...v, isPlaying: false }));
-            onDuckCelebrationMusic?.(false);
+            onDuckRef.current?.(false);
           }
         });
     },
-    [onDuckCelebrationMusic, onEnsureBgmPlaying]
+    []
   );
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !audio.src || audio.src === 'about:blank' || audio.src === window.location.href) {
+      if (activeVoice.active && (activeVoice.primarySrc || activeVoice.fallbackSrc)) {
+        playTrack(activeVoice);
+      }
+      return;
+    }
 
     if (activeVoice.isPlaying) {
       audio.pause();
       setActiveVoice((v) => ({ ...v, isPlaying: false }));
-      onDuckCelebrationMusic?.(false);
+      onDuckRef.current?.(false);
     } else {
-      onEnsureBgmPlaying?.();
-      onDuckCelebrationMusic?.(true);
+      onEnsureBgmRef.current?.();
+      onDuckRef.current?.(true);
       audio
         .play()
         .then(() => {
           setActiveVoice((v) => ({ ...v, isPlaying: true }));
         })
         .catch(() => {
-          setActiveVoice((v) => ({ ...v, isPlaying: false }));
-          onDuckCelebrationMusic?.(false);
+          if (activeVoice.primarySrc) {
+            playTrack(activeVoice);
+          } else {
+            setActiveVoice((v) => ({ ...v, isPlaying: false }));
+            onDuckRef.current?.(false);
+          }
         });
     }
-  }, [activeVoice.isPlaying, onDuckCelebrationMusic, onEnsureBgmPlaying]);
+  }, [activeVoice, playTrack]);
 
   const seekTo = useCallback((timeSec) => {
     const audio = audioRef.current;

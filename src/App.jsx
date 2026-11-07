@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Volume2,
   VolumeX,
@@ -70,7 +70,7 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [introCompleted]);
 
-  const startCelebrationMusic = () => {
+  const startCelebrationMusic = useCallback(() => {
     if (bgmRef.current) {
       bgmRef.current.loop = true;
       bgmRef.current
@@ -78,12 +78,12 @@ export default function App() {
         .then(() => setMusicPlaying(true))
         .catch(() => {});
     }
-  };
+  }, []);
 
-  const handleDuckCelebrationMusic = (ducked) => {
+  const handleDuckCelebrationMusic = useCallback((ducked) => {
     if (!bgmRef.current) return;
     bgmRef.current.volume = ducked ? 0.18 : 0.55;
-  };
+  }, []);
 
   const handleCompleteIntro = () => {
     setIntroCompleted(true);
