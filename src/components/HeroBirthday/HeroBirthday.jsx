@@ -162,7 +162,7 @@ const HERO_GALLERY = [
   },
 ];
 
-export default function HeroBirthday({ onOpenLightbox }) {
+export default function HeroBirthday({ onOpenLightbox, onOpenCakeCeremony }) {
   const [typedIndex, setTypedIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [candlesLit, setCandlesLit] = useState(true);
@@ -594,7 +594,12 @@ export default function HeroBirthday({ onOpenLightbox }) {
                   <Bunny3DEmblem className="w-5 h-5" />
                   <span>Bánh Kem Thỏ Con 3D • Tuổi 19</span>
                 </span>
-                <Badge variant="gold" className="text-[10px] px-2.5 py-0.5">
+                <Badge
+                  variant="gold"
+                  onClick={onOpenCakeCeremony}
+                  className="text-[10px] px-2.5 py-0.5 cursor-pointer hover:bg-gold hover:text-plum-deep transition-all"
+                  title="Mở lại Nghi thức thổi nến toàn màn hình"
+                >
                   3D TƯƠNG TÁC 360°
                 </Badge>
               </div>

@@ -21,12 +21,14 @@ import ClickSpark from './components/ReactBits/ClickSpark';
 import BirthdayVoucherBook from './components/ReactBits/TearTicket';
 import { VinylMusicPlayer } from './components/ReactBits/VinylMusicPlayer';
 import FloatingVoiceBar from './components/ReactBits/FloatingVoiceBar';
+import BirthdayCakeCeremonyModal from './components/BirthdayCakeCeremonyModal/BirthdayCakeCeremonyModal';
 import { VoiceProvider } from './context/VoiceContext';
 import CustomCursor from './components/ui/CustomCursor';
 import { Dialog, DialogContent, DialogTitle } from './components/ui/dialog';
 
 export default function App() {
   const [introCompleted, setIntroCompleted] = useState(false);
+  const [showCakeModal, setShowCakeModal] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(true);
   const [lightboxImage, setLightboxImage] = useState(null);
   const [activeSection, setActiveSection] = useState('hero');
@@ -85,6 +87,7 @@ export default function App() {
 
   const handleCompleteIntro = () => {
     setIntroCompleted(true);
+    setShowCakeModal(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     startCelebrationMusic();
   };
@@ -225,13 +228,23 @@ export default function App() {
             </nav>
           </header>
 
+          {/* 3D Birthday Cake Blowing Ceremony Modal over the Starry Celebration Website */}
+          <BirthdayCakeCeremonyModal
+            isOpen={showCakeModal}
+            onClose={() => setShowCakeModal(false)}
+            onStartCelebrationMusic={startCelebrationMusic}
+          />
+
           {/* Main Celebration Sections wrapped with Unified Voice Audio Provider */}
           <VoiceProvider
             onDuckCelebrationMusic={handleDuckCelebrationMusic}
             onEnsureBgmPlaying={startCelebrationMusic}
           >
             <main className="relative z-10 pb-16">
-              <HeroBirthday onOpenLightbox={setLightboxImage} />
+              <HeroBirthday
+                onOpenLightbox={setLightboxImage}
+                onOpenCakeCeremony={() => setShowCakeModal(true)}
+              />
               <CassetteVoicePlayer />
               <AchievementsBento onOpenLightbox={setLightboxImage} />
               <LoveJourney onOpenLightbox={setLightboxImage} />

@@ -240,201 +240,7 @@ function AnimatedRoomElements({ stepId }) {
 }
 
 // ============================================================================
-// PRE-MAIN PAGE BIRTHDAY CAKE BLOWING CEREMONY STAGE
-// ============================================================================
-function PreMainCakeCeremony({ onEnterMainPage, playVoiceClip }) {
-  const [candlesLit, setCandlesLit] = useState(true);
-  const [micActive, setMicActive] = useState(false);
-  const audioCtxRef = useRef(null);
-  const micStreamRef = useRef(null);
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    playVoiceClip?.('/audio/tts/cake-intro.mp3');
-  }, [playVoiceClip]);
-
-  const fireGrandCelebration = useCallback(() => {
-    const count = 200;
-    const defaults = { origin: { y: 0.6 }, zIndex: 120 };
-    function fire(particleRatio, opts) {
-      confetti({
-        ...defaults,
-        ...opts,
-        particleCount: Math.floor(count * particleRatio),
-      });
-    }
-    fire(0.25, { spread: 26, startVelocity: 55, colors: ['#FCBC5B', '#FF7EB6'] });
-    fire(0.2, { spread: 60, colors: ['#FFEEDF', '#A78BFA'] });
-    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.2, { spread: 130, startVelocity: 30, decay: 0.92, scalar: 1.25 });
-  }, []);
-
-  const handleBlowOut = useCallback(() => {
-    if (!candlesLit) return;
-    setCandlesLit(false);
-    setMicActive(false);
-    if (micStreamRef.current) {
-      micStreamRef.current.getTracks().forEach((t) => t.stop());
-    }
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    fireGrandCelebration();
-    playVoiceClip?.('/audio/tts/cake-blown.mp3');
-  }, [candlesLit, fireGrandCelebration, playVoiceClip]);
-
-  // Optional microphone blow detection
-  const enableMicBlowing = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      micStreamRef.current = stream;
-      setMicActive(true);
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const audioCtx = new AudioContext();
-      audioCtxRef.current = audioCtx;
-      const source = audioCtx.createMediaStreamSource(stream);
-      const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 256;
-      source.connect(analyser);
-      const data = new Uint8Array(analyser.frequencyBinCount);
-
-      const checkVolume = () => {
-        analyser.getByteFrequencyData(data);
-        const avg = data.reduce((sum, v) => sum + v, 0) / data.length;
-        if (avg > 52) {
-          handleBlowOut();
-          return;
-        }
-        rafRef.current = requestAnimationFrame(checkVolume);
-      };
-      rafRef.current = requestAnimationFrame(checkVolume);
-    } catch {
-      // If mic permission denied or unavailable, immediately blow out candles on click
-      handleBlowOut();
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (micStreamRef.current) {
-        micStreamRef.current.getTracks().forEach((t) => t.stop());
-      }
-      if (audioCtxRef.current) {
-        audioCtxRef.current.close().catch(() => {});
-      }
-    };
-  }, []);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.94 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.04 }}
-      transition={{ duration: 0.75, ease: 'easeOut' }}
-      className="relative z-30 max-w-4xl w-full mx-auto px-5 sm:px-8 py-6 sm:py-8 rounded-[36px] bg-plum-deep/90 border-2 border-gold/60 backdrop-blur-xl shadow-[0_28px_90px_rgba(0,0,0,0.92)]"
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        {/* Left Column: Portrait, Greeting & Blow-Out Controls */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <Badge variant="gold" className="mb-3 gap-1.5 px-3.5 py-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>NGHI THỨC THỔI NẾN 3D • THỎ CON 19</span>
-          </Badge>
-
-          {/* Portrait Circle with Confetti SVG & Birthday Cap SVG */}
-          <div className="relative w-28 h-28 sm:w-32 sm:h-32 mb-3 flex items-center justify-center mx-auto lg:mx-0">
-            <img
-              src="/scenes/confetti.svg"
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-[-25%] w-[150%] h-[150%] object-contain pointer-events-none opacity-90"
-            />
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-gold shadow-[0_0_30px_rgba(252,188,91,0.5)] bg-plum">
-              <img
-                src={birthdayGirl.avatar}
-                alt={birthdayGirl.fullName}
-                className="w-full h-full object-cover object-top"
-              />
-            </div>
-            <img
-              src="/scenes/bday-cap.svg"
-              alt=""
-              aria-hidden="true"
-              className="absolute -top-5 right-0 w-12 h-12 object-contain rotate-12 drop-shadow-lg pointer-events-none"
-            />
-          </div>
-
-          <h2 className="font-script text-3xl sm:text-4xl text-gold drop-shadow leading-tight">
-            Happy 19th Birthday, Bảo Hân!
-          </h2>
-          <p className="text-cream/85 text-xs sm:text-sm mt-2 leading-relaxed">
-            {candlesLit
-              ? 'Chiếc bánh kem 3D có chú Thỏ Con (@bunii.817) đội vương miện vàng đang đợi em! Hãy nhắm mắt ước một điều thật đẹp cho tuổi 19 rồi thổi tắt 5 ngọn nến nhé!'
-              : 'Điều ước tuổi 19 của Lưu Nguyễn Bảo Hân đã bay lên bầu trời đêm đầy sao! Chú Thỏ Con cũng đang nhảy tưng bừng chúc mừng công chúa nhỏ của anh!'}
-          </p>
-
-          {/* Action Buttons: Blow Out Candles OR Enter Main Page */}
-          {candlesLit ? (
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mt-5">
-              <Button
-                variant="default"
-                size="lg"
-                onClick={handleBlowOut}
-                className="shadow-[0_0_35px_rgba(252,188,91,0.55)]"
-              >
-                <Flame className="w-5 h-5" />
-                <span>Ước Xong Rồi — Thổi Tắt Nến!</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="default"
-                onClick={enableMicBlowing}
-                className={micActive ? 'border-gold text-gold animate-pulse' : ''}
-              >
-                <Mic className="w-4 h-4" />
-                <span>
-                  {micActive ? 'Đang nghe... Thổi vào Mic!' : 'Thổi bằng Micro'}
-                </span>
-              </Button>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mt-5"
-            >
-              <Button
-                variant="default"
-                size="lg"
-                onClick={onEnterMainPage}
-                className="shadow-[0_0_40px_rgba(252,188,91,0.65)]"
-              >
-                <PartyPopper className="w-5 h-5" />
-                <span>Mở Quà & Bước Vào Trang Chính</span>
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Right Column: Interactive 3D WebGL Bunny Birthday Cake */}
-        <div className="lg:col-span-7 w-full">
-          <div className="rounded-[28px] bg-gradient-to-b from-plum/90 via-[#1d103b]/80 to-plum-deep/90 border border-gold/30 p-3 shadow-inner">
-            <BunnyBirthdayCake3D
-              candlesLit={candlesLit}
-              onBlowOut={handleBlowOut}
-              heightClass="h-[290px] sm:h-[340px]"
-              interactiveHint="Kéo chuột xoay bánh 3D 360° • Chạm vào bánh để thổi nến"
-            />
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// MAIN SPOOKY INTRO COMPONENT (Spooky Rooms -> Cake Blowing Ceremony -> Main Page)
+// MAIN SPOOKY INTRO COMPONENT
 // ============================================================================
 export default function SpookyIntro({
   onCompleteIntro,
@@ -447,7 +253,6 @@ export default function SpookyIntro({
   const [roomTransitioning, setRoomTransitioning] = useState(false);
   const [doorSwinging, setDoorSwinging] = useState(false);
   const [whiteFlash, setWhiteFlash] = useState(false);
-  const [showCakeStage, setShowCakeStage] = useState(false);
   const [isVoiceSpeaking, setIsVoiceSpeaking] = useState(false);
   const isCakeStageRef = useRef(false);
   const audioMuted = false;
@@ -582,10 +387,10 @@ export default function SpookyIntro({
     if (voiceAudioRef.current) {
       voiceAudioRef.current.muted = audioMuted;
     }
-    if (!audioMuted && hauntAudioRef.current.paused && !showCakeStage) {
+    if (!audioMuted && hauntAudioRef.current.paused) {
       hauntAudioRef.current.play().catch(() => {});
     }
-  }, [audioMuted, showCakeStage]);
+  }, [audioMuted]);
 
   const playSfx = useCallback(
     (audioRef) => {
@@ -603,7 +408,7 @@ export default function SpookyIntro({
 
   // Play warm male AI voiceover for each story line and advance after voice finishes
   useEffect(() => {
-    if (roomTransitioning || showCakeStage) return;
+    if (roomTransitioning) return;
 
     if (advanceTimerRef.current) {
       clearTimeout(advanceTimerRef.current);
@@ -655,7 +460,6 @@ export default function SpookyIntro({
     lineIndex,
     lineFinished,
     roomTransitioning,
-    showCakeStage,
     currentStep?.id,
     currentLines.length,
     playVoiceClip,
@@ -674,7 +478,7 @@ export default function SpookyIntro({
     }
   };
 
-  // Interactive SVG Object Click (Bulb -> Door Out -> Door In -> Gift -> Cake Ceremony!)
+  // Interactive SVG Object Click (Bulb -> Door Out -> Door In -> Gift -> Main Page Ceremony Modal!)
   const handleCenterObjectClick = () => {
     if (roomTransitioning || isCakeStageRef.current) return;
 
@@ -733,25 +537,15 @@ export default function SpookyIntro({
         colors: ['#FCBC5B', '#FF7EB6', '#FFEEDF', '#A78BFA'],
       });
 
-      // Transition from white flash into the Pre-Main Cake Blowing Ceremony!
+      // Transition from white flash directly into the Main Page Ceremony Modal!
       setTimeout(() => {
         setWhiteFlash(false);
-        setShowCakeStage(true);
-      }, 1100);
+        onCompleteIntro?.();
+      }, 950);
     }
   };
 
   const getRoomBackgroundStyle = () => {
-    if (showCakeStage) {
-      return {
-        backgroundColor: '#140B29',
-        backgroundImage:
-          'radial-gradient(rgba(252,188,91,0.22), rgba(11,7,25,0.82)), url("/scenes/bedroom.svg")',
-        backgroundPosition: '70% 50%',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-      };
-    }
     if (currentStep.id === 'darkroom') {
       return { backgroundColor: '#000000' };
     }
@@ -796,7 +590,7 @@ export default function SpookyIntro({
     return '/scenes/gift.svg';
   };
 
-  const activeAtmosphereId = showCakeStage ? 'cakeroom' : currentStep.id;
+  const activeAtmosphereId = currentStep.id;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden select-none font-sans">
@@ -850,21 +644,7 @@ export default function SpookyIntro({
 
       {/* CENTER DISPLAY AREA */}
       <div className="relative z-20 w-full h-full flex flex-col items-center justify-center px-4 sm:px-6 pb-14">
-        {showCakeStage ? (
-          <PreMainCakeCeremony
-            playVoiceClip={playVoiceClip}
-            onEnterMainPage={() => {
-              if (voiceAudioRef.current) {
-                voiceAudioRef.current.onended = null;
-                voiceAudioRef.current.pause();
-              }
-              onDuckCelebrationMusic?.(false);
-              onCompleteIntro?.();
-            }}
-          />
-        ) : (
-          <>
-            {/* 1. Centered Floating Story Text */}
+        {/* 1. Centered Floating Story Text */}
             <AnimatePresence mode="wait">
               {!lineFinished && !roomTransitioning && (
                 <motion.div
@@ -994,8 +774,6 @@ export default function SpookyIntro({
                 </motion.div>
               )}
             </AnimatePresence>
-          </>
-        )}
       </div>
 
       {/* White Flash Overlay when opening the gift */}
