@@ -48,7 +48,7 @@ export function AccordionMilestoneGallery({
   return (
     <div
       onMouseLeave={handleHoverLeave}
-      className="flex flex-col lg:flex-row gap-3.5 w-full lg:h-[430px] mb-14"
+      className="flex flex-col lg:flex-row gap-3.5 w-full min-h-[500px] lg:h-[530px] mb-14"
     >
       {items.map((item, idx) => {
         const IconComp = ICON_MAP[item.icon] || Sparkles;
@@ -70,7 +70,7 @@ export function AccordionMilestoneGallery({
             }`}
           >
             {isExpanded ? (
-              <div className="p-4 sm:p-5 flex flex-col md:flex-row items-center gap-5 h-full">
+              <div className="p-4 sm:p-6 flex flex-col md:flex-row items-center gap-5 sm:gap-6 h-full">
                 {/* Left: 100% Uncropped Native Aspect Ratio Photo */}
                 <div
                   onClick={(e) => {
@@ -80,7 +80,7 @@ export function AccordionMilestoneGallery({
                   style={{
                     aspectRatio: `${imgW} / ${imgH}`,
                   }}
-                  className="relative w-full md:w-[42%] max-h-[390px] overflow-hidden rounded-[16px] bg-plum-deep shrink-0 border border-plum-deep/15 shadow-lg group"
+                  className="relative w-full md:w-[42%] max-h-[480px] overflow-hidden rounded-[18px] bg-plum-deep shrink-0 border border-plum-deep/15 shadow-lg group"
                 >
                   <img
                     src={item.image}
@@ -120,11 +120,11 @@ export function AccordionMilestoneGallery({
                       {item.description}
                     </p>
 
-                    <div className="mt-3 grid grid-cols-1 gap-1.5">
+                    <div className="mt-3.5 grid grid-cols-1 gap-2">
                       {item.highlights.map((h, i) => (
                         <div
                           key={i}
-                          className="flex items-center gap-2 text-xs font-semibold text-plum-deep bg-plum-deep/5 px-3 py-1.5 rounded-xl border border-plum-deep/10"
+                          className="flex items-center gap-2.5 text-xs font-semibold text-plum-deep bg-plum-deep/5 px-3.5 py-2 rounded-xl border border-plum-deep/10"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                           <span>{h}</span>
@@ -133,7 +133,7 @@ export function AccordionMilestoneGallery({
                     </div>
                   </div>
 
-                  <div className="pt-3 mt-3 border-t border-plum-deep/15 flex flex-wrap items-center justify-between gap-2">
+                  <div className="pt-3 mt-3 border-t border-plum-deep/15 flex flex-wrap items-center justify-between gap-2 shrink-0">
                     <Badge variant="secondary">{item.stats}</Badge>
                     {item.link && (
                       <a
