@@ -296,11 +296,14 @@ export default function LoveJourney({ onOpenLightbox }) {
     };
 
     const onWheel = (e) => {
+      // Do NOT hijack standard vertical wheel scrolling — allow users to freely scroll the page!
+      if (!e.shiftKey && Math.abs(e.deltaX) <= Math.abs(e.deltaY)) {
+        return;
+      }
       const maxScroll = el.scrollWidth - el.clientWidth;
       if (maxScroll <= 0) return;
 
-      const delta =
-        Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      const delta = e.shiftKey ? e.deltaY : e.deltaX;
       const atStart = el.scrollLeft <= 2 && delta < 0;
       const atEnd = el.scrollLeft >= maxScroll - 2 && delta > 0;
 

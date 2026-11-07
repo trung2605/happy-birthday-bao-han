@@ -20,6 +20,8 @@ import LoveLetterAndCard from './components/LoveLetterAndCard/LoveLetterAndCard'
 import ClickSpark from './components/ReactBits/ClickSpark';
 import BirthdayVoucherBook from './components/ReactBits/TearTicket';
 import { VinylMusicPlayer } from './components/ReactBits/VinylMusicPlayer';
+import FloatingVoiceBar from './components/ReactBits/FloatingVoiceBar';
+import { VoiceProvider } from './context/VoiceContext';
 import CustomCursor from './components/ui/CustomCursor';
 import { Dialog, DialogContent, DialogTitle } from './components/ui/dialog';
 
@@ -223,21 +225,23 @@ export default function App() {
             </nav>
           </header>
 
-          {/* Main Celebration Sections */}
-          <main className="relative z-10 pb-16">
-            <HeroBirthday onOpenLightbox={setLightboxImage} />
-            <CassetteVoicePlayer
-              onDuckCelebrationMusic={handleDuckCelebrationMusic}
-              onEnsureBgmPlaying={startCelebrationMusic}
-            />
-            <AchievementsBento onOpenLightbox={setLightboxImage} />
-            <LoveJourney onOpenLightbox={setLightboxImage} />
-            <BirthdayVoucherBook />
-            <LoveLetterAndCard
-              onReplayIntro={handleReplayIntro}
-              onDuckCelebrationMusic={handleDuckCelebrationMusic}
-            />
-          </main>
+          {/* Main Celebration Sections wrapped with Unified Voice Audio Provider */}
+          <VoiceProvider
+            onDuckCelebrationMusic={handleDuckCelebrationMusic}
+            onEnsureBgmPlaying={startCelebrationMusic}
+          >
+            <main className="relative z-10 pb-16">
+              <HeroBirthday onOpenLightbox={setLightboxImage} />
+              <CassetteVoicePlayer />
+              <AchievementsBento onOpenLightbox={setLightboxImage} />
+              <LoveJourney onOpenLightbox={setLightboxImage} />
+              <BirthdayVoucherBook />
+              <LoveLetterAndCard onReplayIntro={handleReplayIntro} />
+            </main>
+
+            {/* Global Floating Voice Player Bar — follows Bảo Hân across the entire site */}
+            <FloatingVoiceBar />
+          </VoiceProvider>
 
           {/* Spinning Vinyl Record Background Music Controller */}
           <VinylMusicPlayer

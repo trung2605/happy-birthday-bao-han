@@ -1,53 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Play,
   Pause,
   Rewind,
   FastForward,
   RotateCcw,
-  Volume2,
   Sparkles,
-  Heart,
-  Disc,
   Music,
   Radio,
 } from 'lucide-react';
 import { FlyingButton } from './HoloCard';
-
-/**
- * Interactive Vintage Cassette Tape Player ("Cuốn Băng Cassette Tuổi 19 Của Anh Trung")
- * - Placed right below the Hero section.
- * - Plays Anh Trung's long birthday message OVER the website's background music (BGM continues softly underneath).
- * - Continues playing seamlessly while Bảo Hân scrolls and explores the entire website.
- * - Automatically uses `/audio/voice/cassette-wish.m4a` when present, or falls back to the recorded/letter tracks.
- */
-const CASSETTE_TRACKS = [
-  {
-    id: 'main-wish',
-    side: 'SIDE A • 01',
-    title: 'Lời Chúc & Tâm Tình Tuổi 19 Anh Trung Gửi Bảo Hân',
-    subtitle: 'Bản thu âm thật của Anh Trung • Phát trực tiếp trên nền nhạc sinh nhật',
-    primarySrc: '/audio/voice/cassette-wish.m4a',
-    fallbackSrc: '/audio/New Recording 29.m4a',
-  },
-  {
-    id: 'cake-wish',
-    side: 'SIDE A • 02',
-    title: 'Lời Chúc Nghi Thức Thổi Nến Bánh Kem Thỏ Con 3D',
-    subtitle: 'Khoảnh khắc ước nguyện tuổi 19 dưới bầu trời sao',
-    primarySrc: '/audio/tts/cake-intro.mp3',
-    fallbackSrc: '/audio/tts/cake-intro.mp3',
-  },
-  {
-    id: 'card-wish',
-    side: 'SIDE B • 01',
-    title: 'Lời Nhắn Bí Mật Trong Tấm Thiệp 3D Cuối Trang',
-    subtitle: 'Gửi công chúa nhỏ tháng 11 • Đà Nẵng — Sài Gòn',
-    primarySrc: '/audio/tts/flip-card.mp3',
-    fallbackSrc: '/audio/tts/flip-card.mp3',
-  },
-];
+import { CASSETTE_TRACKS, useVoice } from '../../context/VoiceContext';
 
 function formatTime(sec) {
   if (!sec || Number.isNaN(sec) || !Number.isFinite(sec)) return '00:00';
@@ -94,163 +58,92 @@ function CassetteSpool({ isPlaying, tapeRadius = 38 }) {
   );
 }
 
-export default function CassetteVoicePlayer({
-  onDuckCelebrationMusic,
-  onEnsureBgmPlaying,
-}) {
-  const [activeTrackIdx, setActiveTrackIdx] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [autoChain, setAutoChain] = useState(true);
+export default function CassetteVoicePlayer() {
+  const {
+    activeVoice,
+    playTrack,
+    togglePlay: globalTogglePlay,
+    seekBy: globalSeekBy,
+    seekTo: globalSeekTo,
+  } = useVoice();
+  const [selectedIdx, setSelectedIdx] = useState(0);
 
-  const audioRef = useRef(null);
+  const isCurrentCassette =
+    activeVoice.active && activeVoice.source === 'cassette';
+  const isPlaying = isCurrentCassette && activeVoice.isPlaying;
+  const activeTrackIdx = isCurrentCassette ? activeVoice.trackIdx : selectedIdx;
   const currentTrack = CASSETTE_TRACKS[activeTrackIdx] || CASSETTE_TRACKS[0];
 
-  // Load track with automatic fallback if primarySrc isn't uploaded yet
-  useEffect(() => {
-    const wasPlaying = isPlaying;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.onended = null;
-      audioRef.current.ontimeupdate = null;
-      audioRef.current.onloadedmetadata = null;
-      audioRef.current.onerror = null;
-    }
-
-    let triedFallback = false;
-    const audio = new Audio(currentTrack.primarySrc);
-    audio.preload = 'metadata';
-    audio.volume = 1.0;
-    audioRef.current = audio;
-
-    const attachHandlers = (el) => {
-      el.onloadedmetadata = () => {
-        setDuration(el.duration || 0);
-      };
-      el.ontimeupdate = () => {
-        setCurrentTime(el.currentTime || 0);
-      };
-      el.onended = () => {
-        if (autoChain && activeTrackIdx < CASSETTE_TRACKS.length - 1) {
-          setActiveTrackIdx((idx) => idx + 1);
-        } else {
-          setIsPlaying(false);
-          setCurrentTime(0);
-          onDuckCelebrationMusic?.(false);
-        }
-      };
-      el.onerror = () => {
-        if (!triedFallback && currentTrack.fallbackSrc) {
-          triedFallback = true;
-          el.src = currentTrack.fallbackSrc;
-          el.load();
-          if (wasPlaying) {
-            el.play().catch(() => setIsPlaying(false));
-          }
-        } else {
-          setIsPlaying(false);
-          onDuckCelebrationMusic?.(false);
-        }
-      };
-    };
-
-    attachHandlers(audio);
-
-    if (wasPlaying) {
-      onEnsureBgmPlaying?.();
-      onDuckCelebrationMusic?.(true);
-      audio.play().catch(() => {
-        if (!triedFallback && currentTrack.fallbackSrc) {
-          triedFallback = true;
-          audio.src = currentTrack.fallbackSrc;
-          audio.load();
-          audio.play().catch(() => setIsPlaying(false));
-        }
-      });
-    }
-
-    return () => {
-      audio.pause();
-    };
-  }, [activeTrackIdx]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      onDuckCelebrationMusic?.(false);
-    };
-  }, [onDuckCelebrationMusic]);
+  const currentTime = isCurrentCassette ? activeVoice.currentTime : 0;
+  const duration = isCurrentCassette
+    ? activeVoice.duration
+    : activeTrackIdx === 0
+    ? 85
+    : 35;
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-      onDuckCelebrationMusic?.(false);
+    if (isCurrentCassette) {
+      globalTogglePlay();
     } else {
-      // Ensure background music stays playing softly underneath!
-      onEnsureBgmPlaying?.();
-      onDuckCelebrationMusic?.(true);
-      audio
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-        })
-        .catch(() => {
-          if (audio.src !== window.location.origin + currentTrack.fallbackSrc) {
-            audio.src = currentTrack.fallbackSrc;
-            audio.load();
-            audio
-              .play()
-              .then(() => setIsPlaying(true))
-              .catch(() => setIsPlaying(false));
-          }
-        });
+      const track = CASSETTE_TRACKS[selectedIdx];
+      playTrack({
+        source: 'cassette',
+        trackId: track.id,
+        title: track.title,
+        subtitle: track.subtitle,
+        side: track.side,
+        primarySrc: track.primarySrc,
+        fallbackSrc: track.fallbackSrc,
+        trackIdx: selectedIdx,
+      });
     }
+  };
+
+  const handleSelectTrack = (idx) => {
+    setSelectedIdx(idx);
+    const track = CASSETTE_TRACKS[idx];
+    playTrack({
+      source: 'cassette',
+      trackId: track.id,
+      title: track.title,
+      subtitle: track.subtitle,
+      side: track.side,
+      primarySrc: track.primarySrc,
+      fallbackSrc: track.fallbackSrc,
+      trackIdx: idx,
+    });
   };
 
   const seekBy = (deltaSec) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const next = Math.min(
-      duration || 999,
-      Math.max(0, (audio.currentTime || 0) + deltaSec)
-    );
-    audio.currentTime = next;
-    setCurrentTime(next);
+    if (isCurrentCassette) {
+      globalSeekBy(deltaSec);
+    }
   };
 
   const restartTrack = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = 0;
-    setCurrentTime(0);
-    if (!isPlaying) {
+    if (isCurrentCassette) {
+      globalSeekTo(0);
+      if (!isPlaying) globalTogglePlay();
+    } else {
       togglePlay();
     }
   };
 
   const handleScrub = (e) => {
-    const audio = audioRef.current;
-    if (!audio || !duration) return;
+    if (!duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const ratio = Math.min(
       1,
       Math.max(0, (e.clientX - rect.left) / rect.width)
     );
     const nextTime = ratio * duration;
-    audio.currentTime = nextTime;
-    setCurrentTime(nextTime);
+    if (isCurrentCassette) {
+      globalSeekTo(nextTime);
+    }
   };
 
   const progressRatio = duration > 0 ? Math.min(1, currentTime / duration) : 0;
-  // Left spool shrinks from 46px to 28px while Right spool grows from 28px to 46px as tape plays!
+  // Left spool shrinks from 45px to 29px while Right spool grows from 29px to 45px as tape plays!
   const leftRadius = Math.round(45 - progressRatio * 16);
   const rightRadius = Math.round(29 + progressRatio * 16);
 
@@ -521,21 +414,7 @@ export default function CassetteVoicePlayer({
                         <button
                           key={t.id}
                           type="button"
-                          onClick={() => {
-                            setActiveTrackIdx(idx);
-                            if (!isPlaying) {
-                              setTimeout(() => {
-                                if (audioRef.current) {
-                                  onEnsureBgmPlaying?.();
-                                  onDuckCelebrationMusic?.(true);
-                                  audioRef.current
-                                    .play()
-                                    .then(() => setIsPlaying(true))
-                                    .catch(() => {});
-                                }
-                              }, 80);
-                            }
-                          }}
+                          onClick={() => handleSelectTrack(idx)}
                           className={`text-left px-3 py-2 rounded-xl border text-xs transition-all cursor-pointer ${
                             active
                               ? 'bg-gold text-plum-deep border-gold font-bold shadow-md'
@@ -562,36 +441,6 @@ export default function CassetteVoicePlayer({
           </div>
         </div>
       </section>
-
-      {/* Floating Mini-Cassette Indicator when playing so Bảo Hân can control it while scrolling anywhere */}
-      <AnimatePresence>
-        {isPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-20 left-4 z-50 flex items-center gap-3 px-4 py-2.5 rounded-full bg-plum-deep/95 border-2 border-gold shadow-[0_16px_45px_rgba(0,0,0,0.85)] backdrop-blur-xl text-cream"
-          >
-            <Disc className="w-5 h-5 text-gold animate-spin" />
-            <div className="text-xs">
-              <div className="text-[10px] font-display font-bold uppercase tracking-wider text-gold">
-                BĂNG CASSETTE ĐANG CHẠY ({formatTime(currentTime)})
-              </div>
-              <div className="font-semibold truncate max-w-[180px]">
-                {currentTrack.title}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={togglePlay}
-              className="p-2 rounded-full bg-gold text-plum-deep hover:bg-cream transition-colors cursor-pointer"
-              title="Tạm dừng băng Cassette"
-            >
-              <Pause className="w-3.5 h-3.5 fill-plum-deep" />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

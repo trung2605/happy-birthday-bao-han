@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -17,75 +17,34 @@ import { loveLetter, heroProfile } from '../../data/birthdayData';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { FlyingButton } from '../ReactBits/HoloCard';
+import { LETTER_TRACK, useVoice } from '../../context/VoiceContext';
 
-export default function LoveLetterAndCard({
-  onReplayIntro,
-  onDuckCelebrationMusic,
-}) {
+export default function LoveLetterAndCard({ onReplayIntro }) {
   const [flipped, setFlipped] = useState(false);
-  const [readingLetter, setReadingLetter] = useState(false);
   const [paperFolded, setPaperFolded] = useState(false);
-  const voiceRef = useRef(null);
+  const { activeVoice, playTrack, togglePlay: globalTogglePlay } = useVoice();
 
-  useEffect(() => {
-    return () => {
-      if (voiceRef.current) {
-        voiceRef.current.pause();
-      }
-      onDuckCelebrationMusic?.(false);
-    };
-  }, [onDuckCelebrationMusic]);
-
-  const playAiVoiceClip = (url, isLetter = false) => {
-    if (voiceRef.current) {
-      voiceRef.current.onended = null;
-      voiceRef.current.pause();
-    }
-    const audio = new Audio(url);
-    audio.volume = 1.0;
-    voiceRef.current = audio;
-    onDuckCelebrationMusic?.(true);
-    if (isLetter) setReadingLetter(true);
-
-    audio.onended = () => {
-      setReadingLetter(false);
-      onDuckCelebrationMusic?.(false);
-    };
-    audio.onerror = () => {
-      if (isLetter && url !== '/audio/New Recording 30.m4a') {
-        audio.src = '/audio/New Recording 30.m4a';
-        audio.load();
-        audio.play().catch(() => {
-          setReadingLetter(false);
-          onDuckCelebrationMusic?.(false);
-        });
-      } else {
-        setReadingLetter(false);
-        onDuckCelebrationMusic?.(false);
-      }
-    };
-    audio.play().catch(() => {
-      setReadingLetter(false);
-      onDuckCelebrationMusic?.(false);
-    });
-  };
+  const isLetterVoice = activeVoice.active && activeVoice.source === 'letter';
+  const readingLetter = isLetterVoice && activeVoice.isPlaying;
 
   const toggleReadLetter = () => {
-    if (readingLetter && voiceRef.current) {
-      voiceRef.current.pause();
-      setReadingLetter(false);
-      onDuckCelebrationMusic?.(false);
+    if (isLetterVoice) {
+      globalTogglePlay();
     } else {
-      playAiVoiceClip('/audio/voice/love-letter.m4a', true);
+      playTrack({
+        source: 'letter',
+        trackId: LETTER_TRACK.id,
+        title: LETTER_TRACK.title,
+        subtitle: LETTER_TRACK.subtitle,
+        side: LETTER_TRACK.side,
+        primarySrc: LETTER_TRACK.primarySrc,
+        fallbackSrc: LETTER_TRACK.fallbackSrc,
+      });
     }
   };
 
   const handleFlipCard = () => {
-    const nextFlipped = !flipped;
-    setFlipped(nextFlipped);
-    if (nextFlipped) {
-      playAiVoiceClip('/audio/tts/flip-card.mp3', false);
-    }
+    setFlipped((f) => !f);
   };
 
   // @react-spring/web 3D 180-degree card flip
