@@ -448,8 +448,9 @@ export default function SpookyIntro({
   const [doorSwinging, setDoorSwinging] = useState(false);
   const [whiteFlash, setWhiteFlash] = useState(false);
   const [showCakeStage, setShowCakeStage] = useState(false);
-  const [audioMuted, setAudioMuted] = useState(false);
   const [isVoiceSpeaking, setIsVoiceSpeaking] = useState(false);
+  const isCakeStageRef = useRef(false);
+  const audioMuted = false;
 
   const switchAudioRef = useRef(null);
   const doorAudioRef = useRef(null);
@@ -494,7 +495,7 @@ export default function SpookyIntro({
 
       audio.onended = () => {
         setIsVoiceSpeaking(false);
-        if (hauntAudioRef.current) {
+        if (hauntAudioRef.current && !isCakeStageRef.current) {
           hauntAudioRef.current.volume = 0.52;
         }
         onDuckCelebrationMusic?.(false);
@@ -503,7 +504,7 @@ export default function SpookyIntro({
 
       audio.onerror = () => {
         setIsVoiceSpeaking(false);
-        if (hauntAudioRef.current) {
+        if (hauntAudioRef.current && !isCakeStageRef.current) {
           hauntAudioRef.current.volume = 0.52;
         }
         onDuckCelebrationMusic?.(false);
@@ -532,19 +533,17 @@ export default function SpookyIntro({
       if (
         hauntAudioRef.current &&
         hauntAudioRef.current.paused &&
-        !audioMuted &&
-        !showCakeStage
+        !isCakeStageRef.current
       ) {
         hauntAudioRef.current.play().catch(() => {});
       }
-      if (pendingVoiceSrcRef.current && !audioMuted) {
+      if (pendingVoiceSrcRef.current) {
         const { clipUrl, onEndedCallback } = pendingVoiceSrcRef.current;
         playVoiceClip(clipUrl, onEndedCallback);
       } else if (
         voiceAudioRef.current &&
         voiceAudioRef.current.paused &&
-        voiceAudioRef.current.currentTime === 0 &&
-        !audioMuted
+        voiceAudioRef.current.currentTime === 0
       ) {
         voiceAudioRef.current.play().catch(() => {});
       }
@@ -669,13 +668,13 @@ export default function SpookyIntro({
 
   // Interactive SVG Object Click (Bulb -> Door Out -> Door In -> Gift -> Cake Ceremony!)
   const handleCenterObjectClick = () => {
-    if (roomTransitioning) return;
+    if (roomTransitioning || isCakeStageRef.current) return;
 
     if (
       hauntAudioRef.current &&
       hauntAudioRef.current.paused &&
-      !audioMuted &&
-      currentStep.actionType !== 'gift'
+      currentStep.actionType !== 'gift' &&
+      !isCakeStageRef.current
     ) {
       hauntAudioRef.current.loop = true;
       hauntAudioRef.current.play().catch(() => {});
@@ -709,8 +708,11 @@ export default function SpookyIntro({
         setRoomTransitioning(false);
       }, 2400);
     } else if (actionType === 'gift') {
+      isCakeStageRef.current = true;
       if (hauntAudioRef.current) {
         hauntAudioRef.current.pause();
+        hauntAudioRef.current.currentTime = 0;
+        hauntAudioRef.current.src = '';
       }
       playSfx(blastAudioRef);
       onStartCelebrationMusic?.();
@@ -812,56 +814,17 @@ export default function SpookyIntro({
       <ThreeRoomAtmosphere stepId={activeAtmosphereId} />
 
       {/* Top Controls Bar */}
-      <div className="relative z-30 flex flex-wrap items-center justify-between gap-2 px-5 sm:px-8 pt-5">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setAudioMuted((m) => !m)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/55 border border-cream/20 text-cream text-xs font-display font-bold uppercase tracking-wider backdrop-blur-md hover:border-gold transition-colors cursor-pointer"
-          >
-            {audioMuted ? (
-              <>
-                <VolumeX className="w-4 h-4 text-rose" />
-                <span>Âm Thanh & Giọng Anh Trung: Tắt</span>
-              </>
-            ) : (
-              <>
-                <Volume2 className="w-4 h-4 text-gold animate-pulse" />
-                <span>Âm Thanh & Giọng Anh Trung: Bật</span>
-              </>
-            )}
-          </button>
-
-          {!audioMuted && (
-            <button
-              type="button"
-              onClick={() => {
-                if (showCakeStage) {
-                  playVoiceClip('/audio/tts/cake-intro.mp3');
-                } else if (lineFinished && currentStep?.id) {
-                  playVoiceClip(`/audio/voice/${currentStep.id}-action.m4a`);
-                } else if (currentStep?.id) {
-                  playVoiceClip(
-                    `/audio/voice/${currentStep.id}-${lineIndex}.m4a`
-                  );
-                }
-              }}
-              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-display font-bold uppercase tracking-wider backdrop-blur-md hover:bg-gold hover:text-plum-deep transition-colors cursor-pointer"
-              title="Nghe lại câu thoại hiện tại bằng giọng thu âm của Anh Trung"
-            >
-              <Mic className="w-3.5 h-3.5" />
-              <span>
-                {isVoiceSpeaking ? 'Giọng Anh Trung Đang Kể...' : 'Nghe Lại Câu Này'}
-              </span>
-            </button>
-          )}
-        </div>
-
+      <div className="relative z-30 flex items-center justify-end px-5 sm:px-8 pt-5">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => {
-            if (hauntAudioRef.current) hauntAudioRef.current.pause();
+            isCakeStageRef.current = true;
+            if (hauntAudioRef.current) {
+              hauntAudioRef.current.pause();
+              hauntAudioRef.current.currentTime = 0;
+              hauntAudioRef.current.src = '';
+            }
             if (voiceAudioRef.current) {
               voiceAudioRef.current.onended = null;
               voiceAudioRef.current.pause();
@@ -870,7 +833,7 @@ export default function SpookyIntro({
             onStartCelebrationMusic?.();
             onCompleteIntro?.();
           }}
-          className="bg-black/45 border border-cream/15 text-cream/80 hover:text-cream"
+          className="bg-black/45 border border-cream/15 text-cream/80 hover:text-cream cursor-pointer"
         >
           <span>Vào thẳng trang chính</span>
           <FastForward className="w-3.5 h-3.5" />
