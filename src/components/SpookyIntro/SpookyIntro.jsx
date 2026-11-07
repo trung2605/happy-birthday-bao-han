@@ -550,7 +550,15 @@ export default function SpookyIntro({
     };
 
     unlockAndPlayAll();
-    const events = ['pointerdown', 'keydown', 'touchstart', 'wheel', 'click'];
+    const events = [
+      'pointerdown',
+      'pointermove',
+      'mousemove',
+      'keydown',
+      'touchstart',
+      'wheel',
+      'click',
+    ];
     events.forEach((ev) =>
       window.addEventListener(ev, unlockAndPlayAll, { passive: true })
     );
