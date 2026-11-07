@@ -27,16 +27,16 @@ const CASSETTE_TRACKS = [
     id: 'main-wish',
     side: 'SIDE A • 01',
     title: 'Lời Chúc & Tâm Tình Tuổi 19 Anh Trung Gửi Bảo Hân',
-    subtitle: 'Phát trực tiếp trên nền nhạc sinh nhật • Vừa nghe vừa lướt xem toàn bộ trang web',
+    subtitle: 'Bản thu âm thật của Anh Trung • Phát trực tiếp trên nền nhạc sinh nhật',
     primarySrc: '/audio/voice/cassette-wish.m4a',
-    fallbackSrc: '/audio/tts/love-letter.mp3',
+    fallbackSrc: '/audio/New Recording 29.m4a',
   },
   {
     id: 'cake-wish',
     side: 'SIDE A • 02',
     title: 'Lời Chúc Nghi Thức Thổi Nến Bánh Kem Thỏ Bún 3D',
     subtitle: 'Khoảnh khắc ước nguyện tuổi 19 dưới bầu trời sao',
-    primarySrc: '/audio/voice/cake-intro.m4a',
+    primarySrc: '/audio/tts/cake-intro.mp3',
     fallbackSrc: '/audio/tts/cake-intro.mp3',
   },
   {
@@ -44,7 +44,7 @@ const CASSETTE_TRACKS = [
     side: 'SIDE B • 01',
     title: 'Lời Nhắn Bí Mật Trong Tấm Thiệp 3D Cuối Trang',
     subtitle: 'Gửi công chúa nhỏ tháng 11 • Đà Nẵng — Sài Gòn',
-    primarySrc: '/audio/voice/flip-card.m4a',
+    primarySrc: '/audio/tts/flip-card.mp3',
     fallbackSrc: '/audio/tts/flip-card.mp3',
   },
 ];

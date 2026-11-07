@@ -67,7 +67,7 @@ export default function LoveLetterAndCard({
       setReadingLetter(false);
       onDuckCelebrationMusic?.(false);
     } else {
-      playAiVoiceClip('/audio/tts/love-letter.mp3', true);
+      playAiVoiceClip('/audio/voice/cassette-wish.m4a', true);
     }
   };
 
@@ -272,12 +272,12 @@ export default function LoveLetterAndCard({
                   {readingLetter ? (
                     <>
                       <Pause className="w-3.5 h-3.5" />
-                      <span>Đang Đọc Thư (Giọng AI Nam Ấm)...</span>
+                      <span>Đang Đọc Thư (Giọng Anh Trung)...</span>
                     </>
                   ) : (
                     <>
                       <Volume2 className="w-3.5 h-3.5" />
-                      <span>Nghe Anh Trung Đọc Thư (Giọng AI Nam Ấm)</span>
+                      <span>Nghe Anh Trung Đọc Thư</span>
                     </>
                   )}
                 </button>
