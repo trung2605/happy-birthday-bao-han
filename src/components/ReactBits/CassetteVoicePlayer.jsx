@@ -402,39 +402,17 @@ export default function CassetteVoicePlayer() {
                   </button>
                 </div>
 
-                {/* Cassette Track / Side Switcher */}
-                <div className="pt-2 border-t border-cream/10">
-                  <p className="text-[10px] font-display font-bold uppercase tracking-[0.18em] text-cream/60 mb-2">
-                    CHỌN MẶT BĂNG / PHẦN LỜI CHÚC:
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {CASSETTE_TRACKS.map((t, idx) => {
-                      const active = idx === activeTrackIdx;
-                      return (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => handleSelectTrack(idx)}
-                          className={`text-left px-3 py-2 rounded-xl border text-xs transition-all cursor-pointer ${
-                            active
-                              ? 'bg-gold text-plum-deep border-gold font-bold shadow-md'
-                              : 'bg-white/5 text-cream/80 border-cream/15 hover:bg-white/15'
-                          }`}
-                        >
-                          <div className="text-[9px] font-display font-black uppercase tracking-widest opacity-75">
-                            {t.side}
-                          </div>
-                          <div className="truncate font-semibold mt-0.5">
-                            {idx === 0
-                              ? 'Lời Chúc Dài & Tâm Thư'
-                              : idx === 1
-                              ? 'Lời Chúc Thổi Nến'
-                              : 'Lời Chúc Thiệp 3D'}
-                          </div>
-                        </button>
-                      );
-                    })}
+                {/* Cassette Track Info */}
+                <div className="pt-2 border-t border-cream/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+                    <span className="font-display font-bold uppercase tracking-wider text-gold">
+                      SIDE A • 01 — GIỌNG ĐỌC THẬT CỦA ANH TRUNG
+                    </span>
                   </div>
+                  <span className="text-[11px] font-mono text-cream/50">
+                    C-90 HI-FI STEREO • 08.11.2026
+                  </span>
                 </div>
               </div>
             </div>

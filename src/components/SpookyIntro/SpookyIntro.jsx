@@ -268,7 +268,7 @@ export default function SpookyIntro({
   const currentStep = spookyStorySteps[stepIndex];
   const currentLines = currentStep ? currentStep.lines : [];
 
-  // Helper to play a warm Vietnamese Male AI Voiceover clip (/audio/tts/*.mp3)
+  // Helper to play Anh Trung's recorded voice clips (/audio/voice/*.m4a)
   const playVoiceClip = useCallback(
     (clipUrl, onEndedCallback) => {
       pendingVoiceSrcRef.current = { clipUrl, onEndedCallback };
@@ -287,7 +287,7 @@ export default function SpookyIntro({
       audio.volume = 1.0;
       voiceAudioRef.current = audio;
 
-      // Duck background music so the warm male AI voice stands out clearly
+      // Duck background music so Anh Trung's recorded voice stands out clearly
       if (hauntAudioRef.current && !hauntAudioRef.current.paused) {
         hauntAudioRef.current.volume = 0.2;
       }
@@ -406,7 +406,7 @@ export default function SpookyIntro({
     setLineFinished(false);
   }, [stepIndex]);
 
-  // Play warm male AI voiceover for each story line and advance after voice finishes
+  // Play Anh Trung's recorded voiceover for each story line and advance after voice finishes
   useEffect(() => {
     if (roomTransitioning) return;
 

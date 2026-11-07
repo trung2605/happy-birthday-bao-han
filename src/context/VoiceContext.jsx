@@ -18,22 +18,6 @@ export const CASSETTE_TRACKS = [
     primarySrc: '/audio/voice/cassette-wish.m4a',
     fallbackSrc: '/audio/New Recording 29.m4a',
   },
-  {
-    id: 'cake-wish',
-    side: 'SIDE A • 02',
-    title: 'Lời Chúc Nghi Thức Thổi Nến Bánh Kem Thỏ Con 3D',
-    subtitle: 'Khoảnh khắc ước nguyện tuổi 19 dưới bầu trời sao',
-    primarySrc: '/audio/tts/cake-intro.mp3',
-    fallbackSrc: '/audio/tts/cake-intro.mp3',
-  },
-  {
-    id: 'card-wish',
-    side: 'SIDE B • 01',
-    title: 'Lời Nhắn Bí Mật Trong Tấm Thiệp 3D Cuối Trang',
-    subtitle: 'Gửi công chúa nhỏ tháng 11 • Đà Nẵng — Sài Gòn',
-    primarySrc: '/audio/tts/flip-card.mp3',
-    fallbackSrc: '/audio/tts/flip-card.mp3',
-  },
 ];
 
 export const LETTER_TRACK = {

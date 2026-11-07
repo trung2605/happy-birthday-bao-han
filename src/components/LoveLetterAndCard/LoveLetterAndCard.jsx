@@ -212,7 +212,7 @@ export default function LoveLetterAndCard({ onReplayIntro }) {
             viewport={{ once: true }}
             className="lg:col-span-7 relative rounded-[32px] bg-cream text-plum-deep p-7 sm:p-11 shadow-[0_25px_70px_rgba(0,0,0,0.55)] border-4 border-gold/60 overflow-hidden"
           >
-            {/* Decorative Stamp & Date + Warm Male AI Voice Button */}
+            {/* Decorative Stamp & Date + Anh Trung's Voice Button */}
             <div className="flex flex-wrap items-center justify-between gap-2 pb-5 mb-6 border-b-2 border-dashed border-plum-deep/20">
               <div className="flex items-center gap-2 text-plum-deep font-display font-bold text-xs uppercase tracking-[0.18em]">
                 <Mail className="w-4 h-4 text-amber-600" />

@@ -27,17 +27,6 @@ export default function BirthdayCakeCeremonyModal({
   const audioCtxRef = useRef(null);
   const micStreamRef = useRef(null);
   const rafRef = useRef(null);
-  const voiceAudioRef = useRef(null);
-
-  const playVoice = useCallback((url) => {
-    if (voiceAudioRef.current) {
-      voiceAudioRef.current.pause();
-    }
-    const audio = new Audio(url);
-    audio.volume = 1.0;
-    voiceAudioRef.current = audio;
-    audio.play().catch(() => {});
-  }, []);
 
   const fireGrandCelebration = useCallback(() => {
     const count = 220;
@@ -78,7 +67,6 @@ export default function BirthdayCakeCeremonyModal({
     }
 
     fireGrandCelebration();
-    playVoice('/audio/tts/cake-blown.mp3');
     onStartCelebrationMusic?.();
 
     // After 2.4s celebration with bunny jumping, slide modal down and unveil regular website
@@ -88,13 +76,11 @@ export default function BirthdayCakeCeremonyModal({
         onClose?.();
       }, 650);
     }, 2400);
-  }, [candlesLit, fireGrandCelebration, onClose, onStartCelebrationMusic, playVoice]);
+  }, [candlesLit, fireGrandCelebration, onClose, onStartCelebrationMusic]);
 
   // Always automatically request microphone access upon opening
   useEffect(() => {
     if (!isOpen) return;
-
-    playVoice('/audio/tts/cake-intro.mp3');
 
     let streamObj = null;
     const startMic = async () => {
@@ -146,11 +132,8 @@ export default function BirthdayCakeCeremonyModal({
       if (audioCtxRef.current) {
         audioCtxRef.current.close().catch(() => {});
       }
-      if (voiceAudioRef.current) {
-        voiceAudioRef.current.pause();
-      }
     };
-  }, [isOpen, handleBlowOut, playVoice]);
+  }, [isOpen, handleBlowOut]);
 
   if (!isOpen) return null;
 
